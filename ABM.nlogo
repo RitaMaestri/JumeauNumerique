@@ -1,5 +1,3 @@
-extensions [matrix]
-
 globals[
   waiting-planes
   takeoff-time
