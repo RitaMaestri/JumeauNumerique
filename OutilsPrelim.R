@@ -15,7 +15,7 @@ data <- read_xlsx("SampleDataSolPropre.xlsx")
 breaks <- (0:30)*100
 count <- table(data$TempsRoulage, data$VoieEntreeSortiePiste) 
 maxFreq <- 100
-maxRoulage <- round(max(data$TempsRoulage))
+maxRoulage <- round(max(data$TempsRoulage, na.rm=TRUE))
 Voies <- unique(data$VoieEntreeSortiePiste)
 NbVoies <- length(Voies)
 
@@ -80,12 +80,10 @@ for (Vols in VolsHoraires[2:24])
 plot(0:23,NVols,"s",xlab = "Heure", ylab = "Nombre vols")
 
 
-#plot of 15 distribution for temps de roulage for 15 different time intervals
+#plot of 15 distribution for temps de roulage of AirFrance flights for 15 different time intervals
 par(mfrow=c(4,4))
 for ( i in VolsHoraires[5:21]) 
-{hist(data$TempsRoulage[intersect(VolsAF,i)], breaks = breaks, 
-main = paste("Histogram of" , i),xlab = paste("Temps de roulage sur",i),
-xlim = c(0,maxRoulage), ylim = c(0,30))}
+{hist(data$TempsRoulage[intersect(VolsAF,i)], breaks = breaks,xlab = paste("Temps de roulage sur",i), xlim = c(0,maxRoulage), ylim = c(0,30))}
 
 
 #plot of 6 Distributions of temps de roulage for 6 different motorisation
@@ -109,7 +107,6 @@ summ <- capture.output(summary(data$TempsRoulage[data$Mouvement == Mouvement]))
 text(0.30,0.5,summ[1])
 text(0.30,0.4,summ[2])
 }
-
 
 
 VoiesEntreeSortiePiste <- unique(data$VoieEntreeSortiePiste,data)
@@ -143,12 +140,16 @@ barplot(TpsMoyVoies,names.arg = VoieEntreeSortiePiste, col = "red")
 
 
 # Distributions -----------------------------------------------------------
-Breaks_Roulage = (0:(max(data$RoulageAvecArret)*1.1/30))*30
-Breaks_Arrets = (0:(max(data$TempsArrets)*1.1/15))*15
+Breaks_Roulage = (0:(max(data$RoulageAvecArret, na.rm = TRUE)*1.1/30))*30
+Breaks_Arrets = (0:(max(data$TempsArrets, na.rm = TRUE)*1.1/15))*15
 Breaks_Decollage = (0:(max(na.omit(data$TempsDecollage))*1.1/5))*5
 Breaks_Top = (0:(max(na.omit(data$Top))*1.1/10))*10
 data$Top <- as.numeric(data$Top)
 data$TempsDecollage <- as.numeric(data$TempsDecollage)
+
+#Creation of Compagnie
+data$Compagnie<-substr(data$Indicatif, 1, 3)
+data$RoulageAvecArret <- data$TempsRoulage
 
 par(mfcol=c(2,4))
 hist(data$RoulageAvecArret[data$Compagnie == "AFR"], breaks = Breaks_Roulage,

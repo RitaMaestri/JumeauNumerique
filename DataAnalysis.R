@@ -12,6 +12,9 @@ SampleData <- subset(data, select = -c(Motorisation, Pai, Colonne17, Colonne22, 
 #taking off NA rows
 SampleData <- SampleData[!is.na(SampleData$Mouvement), ]
 
+
+#Congestion 1 day------------------------------------------------------
+
 #converting "char" into "time" type
 SampleData[["HeureTu"]] <- chron(times=SampleData[["HeureTu"]])
 SampleData[["HeureTuDebutDecollage"]] <- chron(times=SampleData[["HeureTuDebutDecollage"]])
@@ -82,3 +85,62 @@ dftimes["nAircrafts"]=nAircrafts
 
 plot(dftimes[["time"]], dftimes[["nAircrafts"]], "l", xlab="time", ylab="N airctafts on taxiway")
 max(dftimes["nAircrafts"])
+
+
+#Sample AirFrance flights with the same hours as the other companies ---------------
+library(frequency)
+
+#Creation of Company column
+grep("@",Data$Indicatif, value=TRUE)
+myData$Indicatif <- gsub("@", "", myData$Indicatif)
+myData$Compagnie <- substr(myData$Indicatif,1,3)
+
+frequencies<-as.data.frame(table(myData$Compagnie))
+frequencies$Percentage<-frequencies$Freq *100 / nrow(myData)
+
+majorComp<-frequencies[frequencies$Percentage>1,]
+
+#Time distribution of flights for EZY
+breaks<-900*(0:(24*4)) #bin = a quarter of hour
+
+hoursEZY<-myData[myData$Compagnie=="EZY",][["HeureTu"]]
+hoursEZY<-as.vector(hoursEZY, mode = "integer")
+
+histEZY<-hist(hoursEZY, breaks)
+
+#Time distribution of flights for AFR
+hoursAFR<-myData[myData$Compagnie=="AFR",][["HeureTu"]]
+hoursAFR<-as.vector(hoursAFR, mode = "integer")
+hoursAFR<-sort(hoursAFR)
+
+histAFR<-hist(hoursAFR, breaks)
+
+#the target probability is P_EZY(x)=P(x)*P_AFR(x) -> P(x)=P_EZY(x)/P_AFR(x)
+#resampling AFR flights
+
+auxiliaryProbability <-histEZY$density/histAFR$density
+probabilities<-rep(auxiliaryProbability , histAFR$count)
+sampleIndexesAFR<-sample(1:nrow(myData[myData$Compagnie=="AFR",]), size=length(hoursEZY), prob=probabilities, replace=FALSE)
+
+sampleAFR<-myData[myData$Compagnie=="AFR",][order(myData[myData$Compagnie=="AFR",]$HeureTu),]
+
+histAFRsample<-hist(as.vector(sampleAFR[sampleIndexesAFR,][["HeureTu"]], mode = "integer"), breaks)
+
+#histograms of the Taxiing Time
+Breaks_Roulage = (0:(max(sampleAFR$TempsRoulage, na.rm = TRUE)*1.1/30))*30
+
+histTDR_AFR<-hist(sampleAFR$TempsRoulage, Breaks_Roulage)
+histTDR_EZY<-hist(myData[myData$Compagnie=="EZY",]$TempsRoulage, Breaks_Roulage)
+
+histTDR_AFR$mids[which.max(histTDR_AFR$count)]
+histTDR_EZY$mids[which.max(histTDR_EZY$count)]
+
+
+
+# fit gaussian
+library(MASS)
+fitdistr(sampleAFR$TempsRoulage, "gamma")
+fitdistr(myData[myData$Compagnie=="EZY",]$TempsRoulage, "gamma")
+
+
+
