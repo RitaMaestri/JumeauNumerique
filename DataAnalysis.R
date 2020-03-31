@@ -1,3 +1,4 @@
+setwd("/home/rita/Documenti/Universita/Stage/Projet\ Jumeau\ Numérique/")
 load("~/Documenti/Universita/Stage/Projet Jumeau Numérique/Analyse_18_19.RData")
 
 library(readxl)
@@ -143,4 +144,26 @@ fitdistr(sampleAFR$TempsRoulage, "gamma")
 fitdistr(myData[myData$Compagnie=="EZY",]$TempsRoulage, "gamma")
 
 
+#LIFO and FIFO analysis--------------------------------------
+LIFOdata<-read.csv(file = 'LIFO.csv')
+FIFOdata<-read.csv(file='FIFO.csv')
+LIFOnomax<-read.csv(file = 'LIFOnoMax.csv')
 
+hist(log(LIFOdata$TempsAttentePiste[LIFOdata$TempsAttentePiste!=0]))
+hist(log(FIFOdata$TempsAttentePiste))
+hist(log(LIFOnomax$TempsAttentePiste))
+
+mean(LIFOdata$TempsAttentePiste)
+mean(FIFOdata$TempsAttentePiste)
+mean(LIFOnomax$TempsAttentePiste)
+
+max(LIFOdata$TempsAttentePiste)
+max(FIFOdata$TempsAttentePiste)
+max(LIFOnomax$TempsAttentePiste)
+
+
+
+
+LIFOnomax<-LIFOnomax[!is.na(LIFOnomax$TempsAttentePiste), ]
+
+LIFOnomax$TempsAttentePiste[is.na(LIFOnomax$TempsAttentePiste)]
