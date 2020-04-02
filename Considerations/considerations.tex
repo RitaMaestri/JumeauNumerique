@@ -1,0 +1,68 @@
+
+\documentclass{article}
+\begin{document}
+	
+	\title{Considerations}
+	\maketitle
+	
+	\section*{Understanding the reasons of delay}
+	Delays at the airport can have two origins: physical and human ones.
+\subsection*{Physical reasons}
+Examples: slow aircrafts, unexpected damages/needs of the aircrafts, closed routes, bad weather conditions..
+
+\subsubsection*{DATA ANALYSIS }
+It's the mean by whom we DETECT the reasons of delay.
+\begin{itemize}
+\item \textbf{How?} correlation coefficients, distribution analysis, etc. to get what is happening and the causes. TO DO (as soon as possible): we should ask Loic to provide for his own data analysis to be able to focus on aspects that haven't been explored yet. 
+
+\item \textbf{ What kind of data do we need? }
+\begin{itemize}
+\item Schedule data are the most important ones I think because an aircraft that is late tends to wait at the parking slot/at the gate.
+
+\item Data about the length of routes in the airport (this way we can estimate the distance travelled from the aircrafts thanks to the "cheminement" data of our dataset). 
+	
+\item Weather data.
+
+\item TO COMPLETE
+\end{itemize}
+	
+
+\item \textbf{What can we do with the data we already have have?}
+	Simple correlation coefficients of temps de roulage with other variables and distributions analysis. This can ureveal relatively simple causes (more complex causes, derived from the way of handling the ground traffic, can be unrevealed from a more complex model). Loic can provide for some of these results. $\leftarrow$ TO COMPLETE
+
+\item \textbf{Feature Engeneering.} We can generate data from the editing the ones we already have (extrapolate more informations thanks to encoding techniques...). Our work on this part could be really useful, but we need to understand how the airport works to think about features that make sense.
+	
+\item \textbf{To explore:} security distance and maximum speed for different aircraft types.
+
+\item \textbf{What is the data analysis of reasons of delay useful for?} In our ABM $\rightarrow$ these situations add a random noise to the take off and landing times that must be included in our ABM to make it resistant to unexpected delays and change of schedule. But to make the model more adherent to reality, we can directly build in our model the structure of the airport and consider as a variable in our model ex. which routes are closed...
+
+\item \textbf{What did we already discover?} ...
+\end{itemize}
+
+\subsection*{Human and procedural reasons}
+Deciding that an aircraft has to take of from the northern runway instead of the southern one... $ \rightarrow $ expecially in not standard situations (the ones we're more interested in).
+\subsubsection*{ABM}
+We can't develop a model to solve the "phyisical" reasons of delay since they are technological problemS. What we can focus on and improve are the procedures followed by GC and pilots to handle the traffic. This is a typical agent based simulation object since it involves decision making and exchange of information between agents. We need to know how does the airport work exactly, i.e. standard procedures that are followed. 
+
+The aim of the simulation I have in mind is to see the impact of different policies and decisions taken from the ground controller. In fact, expecially in not standard situations, the eventual delays can be caused from the decision of directing an airplane to nord runway instead of the south one, making him drive along a specific, non-optimal path...
+
+
+\textbf{IMPORTANT}: we must define a meausure of how good is the behaviour showed by the airport platform agents $ \rightarrow $ can it be just the avarage delay ex. per hour? Are there any other important parameters to account for? (for example in the simulation, the avarage waiting time at the runway doesn't change if we swich from first.in-first-out policy to first-in-last-out policy, but the distribution of delay is really different$ \rightarrow $in the lifo case we have a really curve of waiting time, that arrives to 20000 seconds of dealy, but less aircrafts have to wait, what is better?)
+
+\textbf{What can we reproduce with the current ABM?}  The airport capacity: the airport has a capacity i.e. maximum number of aircrafts that can use the runway in one hour, that depends mainly on the structure of the airport (how many runways does it have, is it well linked to the gates...) and of the airplanes (bigger airplanes move slower and need more security distance). In our model the capacity depends on the time needed to empty the runway-> when this time is greater than the avarage time interval between two departures (this time depends on the schedule) we see that long queues take place.
+
+
+\section*{What I think we sould do first}
+Basically questions for Loic.
+\begin{itemize}
+\item Get the standard procedures of the airport and read them carefully.
+\item Ask for the stats of Skylab that Loic showed us during the meeting and ask him to explain why he chose those statistics in particular and what are the results (this is one possible starting point to understand the operating modes of the airport).
+\item Loic spoke about prediction: what does he want us to predict? Temps de Roulage? The general behaviour of the aircrafts in the taxiways?
+\end{itemize}
+
+\section*{My ideas}
+\begin{itemize}
+	\item If it's useful to predict taxi time/delay for every airplane, we could make a machine learning model that has as target variable the taxi time/delay. In this case the feature engeneering part would become really fundamental (we could turn it into a temporal serie problem also).
+	\item Introducing Ground controller strategies in our ABM as explained before.
+\end{itemize}
+\end{document}
