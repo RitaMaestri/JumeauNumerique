@@ -495,3 +495,77 @@ d <- ggplot(Data, aes(HeureTu,TempsAttentePiste))
 
 d + geom_bin2d(binwidth = c(1,10)) + scale_fill_continuous(type = "viridis") + theme_bw()
 d + stat_density_2d(aes(fill = ..level..), geom = "polygon", colour="white")
+
+
+
+# Avions sur les voies ----------------------------------------------------
+
+Data$HeureStart[Data$Mouvement == "Atterrissage"] <- Data$HeureTu[Data$Mouvement == "Atterrissage"]
+Data$HeureStart[Data$Mouvement != "Atterrissage"] <- 
+    Data$HeureTu[Data$Mouvement != "Atterrissage"] - (Data$Top[Data$Mouvement != "Atterrissage"] + Data$TempsAttente1[Data$Mouvement != "Atterrissage"]
+                                                      + Data$TempsAttente2[Data$Mouvement != "Atterrissage"] + Data$TempsAttente3[Data$Mouvement != "Atterrissage"]
+                                                      + Data$TempsArretTotal[Data$Mouvement != "Atterrissage"] + Data$TempsAttentePiste[Data$Mouvement != "Atterrissage"]
+                                                      + Data$TempsRoulage[Data$Mouvement != "Atterrissage"] + Data$TempsTraversee[Data$Mouvement != "Atterrissage"])
+                                                      
+
+Data$HeureStop[Data$Mouvement == "Atterrissage"] <- 
+    Data$HeureTu[Data$Mouvement == "Atterrissage"] + (Data$Top[Data$Mouvement == "Atterrissage"] + Data$TempsTraversee[Data$Mouvement == "Atterrissage"]
+                                                      + Data$TempsAttente1[Data$Mouvement == "Atterrissage"] + Data$TempsAttente2[Data$Mouvement == "Atterrissage"]
+                                                      + Data$TempsAttente3[Data$Mouvement == "Atterrissage"] + Data$TempsArretTotal[Data$Mouvement == "Atterrissage"]
+                                                      + Data$TempsRoulage[Data$Mouvement == "Atterrissage"] )
+
+Data$HeureStop[Data$Mouvement != "Atterrissage"] <- Data$HeureTu[Data$Mouvement != "Atterrissage"]
+
+NbAvionsVoies<- function(Data,TimeStep,Start = 0, Stop = 86400){
+    NbSteps = (Stop-Start)/TimeStep
+    NbAvions <- data.frame(1:NbSteps,1:NbSteps)
+    names(NbAvions) <- c("Heure","Nb")
+    for (i in 0:(NbSteps-1)){
+        min = Start + i*TimeStep
+        max = min + TimeStep 
+        NbAvions$Heure[i+1] <- (min+max)/2
+        avionsvoies <- Data$Indicatif[(Data$HeureStart < min  &  max < Data$HeureStop) 
+                                      | (min < Data$HeureStart & Data$HeureStart < max) 
+                                      | (min < Data$HeureStop & Data$HeureStop < max)]
+        NbAvions$Nb[i+1] <- length(avionsvoies)
+    }
+    return(NbAvions)
+}
+
+AttenteMoy<- function(Data,TimeStep,Start = 0, Stop = 86400, type = "smooth"){
+    NbSteps = (Stop-Start)/TimeStep
+    TpsAttenteMoy <- data.frame(1:NbSteps,1:NbSteps)
+    names(TpsAttenteMoy) <- c("Heure","TempsAttenteMoy")
+    for (i in 0:(NbSteps-1)){
+        min = Start + i*TimeStep
+        max = min + TimeStep 
+        TpsAttenteMoy$Heure[i+1] <- (min+max)/2
+        if (type == "smooth"){
+            avionsvoies <- Data$Indicatif[(Data$HeureStart < min  &  max < Data$HeureStop) 
+                                          | (min < Data$HeureStart & Data$HeureStart < max) 
+                                          | (min < Data$HeureStop & Data$HeureStop < max)]
+        }
+        else {
+            avionsvoies <- Data$Indicatif[min<Data$HeureTu & Data$HeureTu< max]  
+        }
+        TpsAttenteMoy$TempsAttenteMoy[i+1] <- mean((Data$TempsAttentePiste + Data$TempsArretTotal + Data$TempsAttente1 + Data$TempsAttente2+ Data$TempsAttente3)[Data$Indicatif %in% avionsvoies])
+    }
+    return(TpsAttenteMoy)
+}
+
+
+
+# Plot Congestion--------------------------------------------------------------------
+AvionsVoies <- NbAvionsVoies(Data,60)
+TempsMoyAttente <- AttenteMoy(Data,60)
+TempsMoyPiste <- aggregate(Data$TempsAttentePiste, by = list(as.integer(Data$HeureTu/60)),mean)
+names(TempsMoyPiste) <- c("Heure", "TempsMoy")
+TempsMoyPiste$Heure <- TempsMoyPiste$Heure*60
+
+par(mar = c(5, 4, 4, 5))
+plot(AvionsVoies$Heure,AvionsVoies$Nb/790, ylab = "Nombre moyen d'avions sur les voies", xlab = "Heure")
+par(new = TRUE)
+plot(TempsMoyAttente$Heure,TempsMoyAttente$TempsAttenteMoy, type = "p", axes = FALSE, bty = "n", xlab = "", ylab = "", col = "red")
+axis(side = 4, col = "red", col.axis = "red")
+mtext("Temps d'attente moyen (s)", side=4, line=2.5, col = "red")
+
