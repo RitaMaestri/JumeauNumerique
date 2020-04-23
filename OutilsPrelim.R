@@ -569,3 +569,54 @@ plot(TempsMoyAttente$Heure,TempsMoyAttente$TempsAttenteMoy, type = "p", axes = F
 axis(side = 4, col = "red", col.axis = "red")
 mtext("Temps d'attente moyen (s)", side=4, line=2.5, col = "red")
 
+# Two Runways -------------------------------------------------------------
+
+Data$Doublet[Data$Qfu == "09L" | Data$Qfu == "27R"| Data$Qfu == "09R"|Data$Qfu == "27L"|Data$Qfu == "NORD"] <- "NORD"
+Data$Doublet[Data$Qfu == "08L" | Data$Qfu == "26R"| Data$Qfu == "08R"|Data$Qfu == "26L"|Data$Qfu == "SUD"] <- "SUD"
+
+Runways <- data.frame((0:75839)*15*60)
+names(Runways) <- "HeureTu"
+Runways$DateTu <- sprintf("%02d/%02d/%04d", as.POSIXlt(Runways$HeureTu, origin = "2018-01-01", tz = "GMT")$mday,
+                          as.POSIXlt(Runways$HeureTu, origin = "2018-01-01", tz = "GMT")$mon + 1,
+                          as.POSIXlt(Runways$HeureTu, origin = "2018-01-01", tz = "GMT")$year + 1900)
+Runways$HeureTu <- Runways$HeureTu%%86400
+Runways$Nord_Atterrissage <- FALSE
+Runways$Sud_Atterrissage <- FALSE
+Runways$Nord_Decollage <- FALSE
+Runways$Sud_Decollage <- FALSE
+Runways$NbRunways_Atterrissage <- NA
+Runways$NbRunways_Decollage <- NA
+
+# days <- unique(Runways$DateTu)
+timesteps <- sort(c(unique(Runways$HeureTu),86400))
+
+for (i in 1:(length(timesteps)-1)){
+    print(timesteps[i])
+    for (day in unique(Data$DateTu[timesteps[i] <= Data$HeureTu 
+                            & Data$HeureTu < timesteps[i+1]
+                            & Data$Mouvement == "Atterrissage"
+                            & Data$Doublet == "NORD"])){
+        Runways$Nord_Atterrissage[Runways$DateTu == day & Runways$HeureTu == timesteps[i]] <- TRUE
+    }
+    for (day in unique(Data$DateTu[timesteps[i] <= Data$HeureTu 
+                                   & Data$HeureTu < timesteps[i+1]
+                                   & Data$Mouvement == "Atterrissage"
+                                   & Data$Doublet == "SUD"])){
+        Runways$Sud_Atterrissage[Runways$DateTu == day & Runways$HeureTu == timesteps[i]] <- TRUE
+    }
+    for (day in unique(Data$DateTu[timesteps[i] <= Data$HeureTu 
+                                   & Data$HeureTu < timesteps[i+1]
+                                   & Data$Mouvement == "Decollage"
+                                   & Data$Doublet == "NORD"])){
+        Runways$Nord_Decollage[Runways$DateTu == day & Runways$HeureTu == timesteps[i]] <- TRUE
+    }
+    for (day in unique(Data$DateTu[timesteps[i] <= Data$HeureTu 
+                                   & Data$HeureTu < timesteps[i+1]
+                                   & Data$Mouvement == "Decollage"
+                                   & Data$Doublet == "SUD"])){
+        Runways$Sud_Decollage[Runways$DateTu == day & Runways$HeureTu == timesteps[i]] <- TRUE
+    }
+}
+
+Runways$NbRunways_Atterrissage <- as.integer(Runways$Nord_Atterrissage) + as.integer(Runways$Sud_Atterrissage)
+Runways$NbRunways_Decollage <- as.integer(Runways$Nord_Decollage) + as.integer(Runways$Sud_Decollage)
