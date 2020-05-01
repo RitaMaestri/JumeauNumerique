@@ -1,0 +1,12 @@
+QUESTIONS
+- What information is available to you when you work? whith which criterion do you decide the time at wich the aircraft leaves the gate (for example, is the schedule available to you?) or is allowed to land and the runway it has to use?
+- How much autonomy does the pilots have? Is it the ground controller that choses the taxiway? If yes, with which criterion?
+- How often and how long is a runway/taxiway usually closed? What are the reasons?
+- what is the difference, from an operational point of view, between Low visibility conditions and normal conditions?
+- Some of the situations that can cause delay are bad weather conditions, closed runways, closed taxiway, de-icing operations. Can you name other situations?
+
+
+DATA
+-Does taxi time include waiting time during taxiing and waiting time at thw runway?
+-how is mean speed calculated in our dataset?
+-are the one way roads indicated in the autocad file?
