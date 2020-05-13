@@ -1,0 +1,157 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[font=small,labelfont=bf]{caption}
+\begin{document}
+	\title{Report meeting ground controllers}
+	\maketitle
+
+We asked some questions to the ground controllers in order to better understand how they take decisions.
+
+
+\subsubsection*{How is a runway chosen?}
+
+
+The runway is not chosen by the ground controller but from the supervisor, thanks to the help of of the departure manager (DMAN, planning tool developed to improve the departure flows at airports and increase the predictability). 
+
+In most cases the flights that go north (south) depart from the northern (southern) runway, because it is preferable to have conflicts between aircrafts on the ground instead of having them in the air.
+
+
+\subsubsection*{How much time before the departure does the DMAN chose the runway?}
+
+45 minutes before the scheduled departure the DMAN receives the flight plan from the centralized french system. As soon as the DMAN receives the schedule, it assigns the runway according to the strategy that the supervisor gave to it as a parameter.
+
+\subsubsection*{Do you use the same strategy in high and low traffic conditions?}
+
+No, usually in high traffic conditions the standard procedure suggested by DMAN is followed, because the ground controllers don't have time to think of another solution. While in low traffic situations the ground controllers can decide to change the runway or not to use the standard taxiway to shorten the taxi time. 
+In fact the standard paths followed during high traffic situations include one way routes to avoid collisions between aircrafts, but during low traffic situation the ground controller can decide to make an aircraft travel along a one way route on the opposite direction to shorten taxi time since there is no danger of accident.
+
+\newpage
+
+\subsubsection*{Is the time at which an aircraft should take off an information available to the ground controller?}
+
+
+No, the scheduled time is given as an input to the DMAN. The DMAN is handled by the delivery controller, who is in charge of giving the departure clearance to the aircraft.
+The ground controller get to know that he has to handle an aircraft only when the aircraft is ready for the push back procedure.
+
+\subsubsection*{What the geagraphical that you have to handle? What is PAI?}
+
+In high traffic conditions the airport platform is divided into four geographic area and there is one ground controller for each area.
+In low traffic conditions there is only one ground controller in charge of the whole platform.
+
+The stand area around the terminal (mainly around terminal 2 where there is the majority of the traffic) is handled by apron agent.
+The ground controller receives the aircraft at some stops that define the limit between apron agent area and ground controller area, that are called PAI (point d'arret intermediaire).
+
+An important thing to know is the definition of Estimated Off-Block Time (EOBT), which is the estimated time at which the aircraft will commence movement associated with departure.
+The taxi time is the time between the EOBT and the departure time.
+
+
+\subsubsection*{What are the tasks of ground controllers?}
+
+
+The ground controller job is standardized. There is a standard trajectory identified by the stand and the runway. In more than 90\% of the cases the aircrafts follow the standard taxiway, mainly during high traffic conditions because the GC don't have time to think about another taxiway.
+
+\subsubsection*{What are the situations where the GC doesn't use the standard paths?}
+
+
+\begin{itemize}
+	\item If there is a traffic jam.
+	\item If during a push back procedure an aircraft occupies a taxiway for a long time, preventing other aircrafts to use that taxiway.
+	\item An aircraft is stuck in a taxiway
+	\item During low traffic situation the GC can decide to make an aircraft go in the opposite direction to the standard one.
+\end{itemize}
+
+\subsubsection*{How much autonomy do the pilots have?}
+
+They don't have any autonomy, except for the speed they taxi with. As the taxiway are quite long they can see from far away if the holding point at the runway is crowded or not. If it's crowded, they usually taxi slowly. On the opposite if they see that the holding point is empty they will taxi faster.
+
+\subsubsection*{Why do the aircrafts stop during taxiing?}
+
+\begin{itemize}
+	\item they arrived at a stop (PAI), if the crew hasn't already switched from apron controller and ground controller.
+	\item there is a conflict.
+	\item operational issue (pushback in progress ahead it).
+\end{itemize}
+
+
+\subsubsection*{Which do you think are the parameters that we can try to optimize?}
+
+When you don't have much traffic, optimization is not needed because the system is not complex. The taxi time is already as low as possible.
+In high traffic conditions, there are several parameters to be taken in consideration. When there is much traffic, the aircrafts may have to wait. The waiting times can be at the runway, in the taxiway if there is another aircraft with priority...
+
+To optimize the taxi time, the A-CDM (= DMAN) process (airport collaborative decision making) is used. The strategy is to make aircrafts wait at the gate instead of at the runway to get less congestion on the taxiways and to minimize the taxi time.
+The decision to make the aircrafts wait at the gate or at the runway is taken by the supervisor with the help of DMAN. 
+The supervisor gives as an input to the DMAN some parameters, whose value depends on a predefined strategy built in collaboration with ground controllers according to their experience during traffic management.
+
+The parameters to be given as an input to the DMAN are:
+\begin{itemize}
+	\item How many aircrafts per hour can leave from or land on a specific runway, i.e. the capacity of the runway. This parameter is generally set at 38 aircrafts per hour.
+	\item the maximum time that an aircraft can wait at the holding point at the runway, i.e. the pressure at the runway, generally set at 50 minutes.
+\end{itemize}
+
+Inputting the system with those values doesn't necessarily mean that you will have those maximum values in reality, because the algorithm don't take in account unexpected events, such as an aircraft blocked during taxiing. So, for example, the maximum number of aircrafts leaving from a runway can be set as higher than the actual capacity of the runway because unexpected events could occur, and less aircrafts than expected arrive on time at the holding point.
+
+For this reason, something that could be interesting to optimize are the parameters given as an input to the DMAN, to reach the right balance between the number of aircraft holding (in order to have always at least one aircraft holding and ready to depart, even in case of unexpected events) and not having congestion on the ground platform.
+For example, if for every aircraft taking off there is one leaving the gate, the system is not resistant, because, if something happen during taxiing to the second aircraft, there won't be any substitute ready to take off.
+
+But here, another phenomenon has to be taken in consideration: when the pressure is not visible, i.e. when the aircrafts wait at the gate instead of at the runway, the pilots seem to act in a more relaxed way, since they think there is no one behind them waiting for them to take off.
+
+The parameters we are using now allow up to 9 aircrafts to queue before the runway. The number of aircrafts queuing, in fact, depends on the capacity of the runway and on the waiting time of the runway that are given as an input to the DMAN.
+
+\subsubsection*{Can you give as an input to the DMAN the case when an aircraft remains blocked during taxiing?}
+
+No. It's a pre departure sequencer. Before the departure of the aircraft from the gate, the DMAN outputs the sequence of departing aircrafts, based on some priority factors.
+
+DMAN makes continuous calculation for best off-block departure sequence, providing for each flight an off-block departure time based on TOBT ( Target Off-block Time, target time set by airline itself as off-block departure time). For each flight, the DMAN calculate a TSAT (Target Start-up Approval Time, i.e. off-block departure approved time, calculated by the system), providing an off-block sequence. The system also calculates the expected take off time.
+
+The system is updated with the actual off-block time and with the actual take off time when one of those events occur.
+If there is a problem during taxiing, the system doesn't know. Since every 30 seconds the system recalculates the sequence, if an aircraft doesn't take off at the expected time the system will expect it to take off in the next 30 seconds, until the aircraft actually takes off. In fact, the DMAN is made to generate TSAT (Target Start-up Approval Time), so it doesn't care what happens to the queue at the runway.
+
+When the system observes that the rate of departure is at 38 flights per hour, situation called steady regime, all the aircrafts at the stand aren't allowed to leave the stand. 
+
+Let's take an extreme example. Let's consider a full system: 9 aircrafts are in queue, \textit{x} aircrafts are on the taxiway, but the runway is blocked. Since no aircrafts are using the runway and the platform is full, there are no aircrafts leaving the stand.
+In this situation, we'll end up with more than 9 aircrafts at the holding point.
+
+
+
+\subsubsection*{Would you like us to analyze exclusively the job of the ground controller (so focus on the pure taxi time) or also on the work of the supervisor, that tunes the parameters of DMAN and decides the runway?}
+
+If you want to optimize the taxi time and taxi operations, if you take off the pre departure sequencer, the model wouldn't be sufficient to explain the situation.
+
+The main problem with this system is that it is not resistant when it works in a full load regime, because it is sufficient a little inconvenient to cause big delays.
+
+Another way to see the problem is make it more green. This means considering efficiency not only a matter of time but also a matter of pollution.
+
+\subsubsection*{Do you think you could share the DMAN system for us to use it during our simulation?}
+
+It's not possible to have the permission but it could be relatively simple to simulate it. There are mainly two situations: the load is far away from the capacity, or the load is near the capacity. In the first case the DMAN is unlikely to change your analysis.
+
+What's important for our work is the output of the system, which is the amount of the aircrafts released by the system.
+We have two possibilities here. When the airport platform is not in a full load regime, the system will basically output the target off block time (TOBT, decided by air companies), if it's at full load it will output a list linked to the capacity of the airport that is given as an input.
+
+The output of the system is then a list of times at which the aircrafts are allowed to leave the gate. We can provide for a data set containing this kind of list.
+
+\subsubsection*{What are other parameters we could optimize?}
+
+The airport is a system that has a certain capacity, i.e. a maximum number of takes-off per hour, arrivals per hour, stands available. When the capacity is exceeded, queues are generated. They can be at the holding point, at the push back, but also at the stands. In fact it can happen that an aircraft cannot park in his stand because the previous aircraft hasn't departed yet because there are too many aircrafts at the holding point (vicious circle). The pre departure sequences allows to place the pressure either at the runway (and in this case you'll have a lot of stands available) or place the pressure at the stand. In the last case, holding time for arrivals are generated.
+
+
+A new part of the equation is then including the number of stands available. 
+To avoid the waiting time of arrival, we try to identify the stands where there could be a coflict and if we identify them soon enough, we try to delay the arrival in the air, if possible, or make the aircraft hold between the runways (in fact the landing runway is the outer one, so the aircraft can wait on the taxiway that connect the two), or make it wait somewhere on the taxiway.
+Some airports that don't have many stands try to free the stands as soon as possible building a holding area before the runway, where the aircraft can shut down the engine and can wait. Also Charles de Gaulle airport made a trial on this technique of holding areas last summer.
+Anyway, those are strategies that are usually applied when the maximum capacity is reached.
+
+\bigskip
+
+Another important thing to optimize is having too many aircrafts in one specific area. When you lose fluidity of the traffic, peaks of work load for the ground controllers and for the pilots. Having many aircraft that go in many different directions at the same time in the same geographical area could be really heavy for the ground controllers to handle.
+
+\subsubsection{How often and for how long a runway gets closed?}
+
+At daytime the runway get closed for two main reasons:
+\begin{itemize}
+	\item scheduled daily inspection: 3 times a day, it lasts 10-20 minutes.
+	\item unscheduled closure caused by bird strikes: 10-30 minutes.
+	\item technical work that needs to be done at daytime (radio electric system): 1-2 hours.
+\end{itemize}
+At night time we close one of the two couples of runway, alternating them every week: one week we close the southern, the week after the northern. They close from 00 to 05.
+\end{document}
