@@ -1,0 +1,385 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.18)  3 JUN 2020 18:37
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**main.tex
+(./main.tex
+LaTeX2e <2020-02-02> patch level 2
+L3 programming layer <2020-02-14>
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
+)
+\c@part=\count167
+\c@section=\count168
+\c@subsection=\count169
+\c@subsubsection=\count170
+\c@paragraph=\count171
+\c@subparagraph=\count172
+\c@figure=\count173
+\c@table=\count174
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen134
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen135
+\Gin@req@width=\dimen136
+)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/01/22 v1.3d Sub-captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/01/03 v3.4h Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 61.
+\captionmargin=\dimen137
+\captionmargin@=\dimen138
+\captionwidth=\dimen139
+\caption@tempdima=\dimen140
+\caption@indent=\dimen141
+\caption@parindent=\dimen142
+\caption@hangindent=\dimen143
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count175
+\c@continuedfloat=\count176
+)
+\c@subfigure=\count177
+\c@subtable=\count178
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
+\col@sep=\dimen144
+\ar@mcellbox=\box45
+\extrarowheight=\dimen145
+\NC@list=\toks15
+\extratabsurround=\skip49
+\backup@length=\skip50
+\ar@cellbox=\box46
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
+File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
+\l__kernel_color_stack_int=\count179
+\l__pdf_internal_box=\box47
+)
+(./main.aux)
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+ (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count180
+\scratchdimen=\dimen146
+\scratchbox=\box48
+\nofMPsegments=\count181
+\nofMParguments=\count182
+\everyMPshowfont=\toks16
+\MPscratchCnt=\count183
+\MPscratchDim=\dimen147
+\MPnumerator=\count184
+\makeMPintoPDFobject=\count185
+\everyMPtoPDFconversion=\toks17
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 12.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 12.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 12.
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 5.
+)
+\tf@toc=\write3
+\openout3 = `main.toc'.
+
+ [2]
+[3] [4] [5]
+<tabella.png, id=26, 496.35437pt x 553.06625pt>
+File: tabella.png Graphic file (type png)
+<use tabella.png>
+Package pdftex.def Info: tabella.png  used on input line 101.
+(pdftex.def)             Requested size: 256.0748pt x 285.33443pt.
+ [6 <./tabella.png>]
+<companiesTaxiTime.png, id=32, 602.25pt x 526.21594pt>
+File: companiesTaxiTime.png Graphic file (type png)
+<use companiesTaxiTime.png>
+Package pdftex.def Info: companiesTaxiTime.png  used on input line 127.
+(pdftex.def)             Requested size: 180.67639pt x 157.866pt.
+
+Overfull \hbox (8.17639pt too wide) in paragraph at lines 127--128
+ [][] 
+ []
+
+
+Overfull \hbox (5.22424pt too wide) in paragraph at lines 136--136
+[]|\OT1/cmr/m/n/5 Company| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--136
+\OT1/cmr/m/n/5 over the
+ []
+
+
+Underfull \hbox (badness 2799) in paragraph at lines 136--136
+\OT1/cmr/m/n/5 to-tal n\TS1/cmr/m/n/5 ° \OT1/cmr/m/n/5 of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--136
+[]|\OT1/cmr/m/n/5 Mean
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--136
+\OT1/cmr/m/n/5 Taxi
+ []
+
+
+Overfull \hbox (0.74496pt too wide) in paragraph at lines 136--136
+\OT1/cmr/m/n/5 Time(s)| 
+ []
+
+
+Overfull \hbox (9.58716pt too wide) in paragraph at lines 135--146
+ [][] 
+ []
+
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 124--151
+[]$[]$
+ []
+
+[7 <./companiesTaxiTime.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 173--173
+[]|\OT1/cmr/m/n/10 Mean
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--173
+[]|\OT1/cmr/m/n/10 Mean
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 190--190
+[]|\OT1/cmr/m/n/10 Standard
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 190--190
+[]|\OT1/cmr/m/n/10 p value
+ []
+
+[8]
+<n_avions_TempsRoulage.png, id=47, 581.17125pt x 344.03531pt>
+File: n_avions_TempsRoulage.png Graphic file (type png)
+<use n_avions_TempsRoulage.png>
+Package pdftex.def Info: n_avions_TempsRoulage.png  used on input line 211.
+(pdftex.def)             Requested size: 227.62204pt x 134.74542pt.
+<Distance.png, id=48, 602.25pt x 498.36188pt>
+File: Distance.png Graphic file (type png)
+<use Distance.png>
+Package pdftex.def Info: Distance.png  used on input line 222.
+(pdftex.def)             Requested size: 142.26378pt x 117.7234pt.
+<TempsAttente.png, id=49, 602.25pt x 498.36188pt>
+File: TempsAttente.png Graphic file (type png)
+<use TempsAttente.png>
+Package pdftex.def Info: TempsAttente.png  used on input line 229.
+(pdftex.def)             Requested size: 142.26378pt x 117.7234pt.
+
+Overfull \hbox (4.26588pt too wide) in paragraph at lines 229--230
+ [][] 
+ []
+
+
+Underfull \hbox (badness 3354) in paragraph at lines 230--230
+[]\OT1/cmr/bx/n/8 (b) |\OT1/cmr/m/n/8 Com-par-i-son be-tween wait-ing
+ []
+
+<Vitesse.png, id=50, 602.25pt x 498.36188pt>
+File: Vitesse.png Graphic file (type png)
+<use Vitesse.png>
+Package pdftex.def Info: Vitesse.png  used on input line 235.
+(pdftex.def)             Requested size: 142.26378pt x 117.7234pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Overfull \hbox (5.23727pt too wide) in paragraph at lines 267--267
+[]|\OT1/cmr/bx/n/10 Company| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 267--268
+[]|\OT1/cmr/bx/n/10 Frequency
+ []
+
+
+Overfull \hbox (5.23727pt too wide) in paragraph at lines 275--275
+[]|\OT1/cmr/bx/n/10 Company| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 275--276
+[]|\OT1/cmr/bx/n/10 Frequency
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[9 <./n_avions_TempsRoulage.png (PNG copy)>]
+<map_airport_filled.png, id=54, 1515.6625pt x 833.1125pt>
+File: map_airport_filled.png Graphic file (type png)
+<use map_airport_filled.png>
+Package pdftex.def Info: map_airport_filled.png  used on input line 290.
+(pdftex.def)             Requested size: 345.0pt x 189.62872pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[10 <./Distance.png (PNG copy)> <./TempsAttente.png (PNG copy)> <./Vitesse.png 
+(PNG copy)>]
+Overfull \hbox (18.59456pt too wide) in paragraph at lines 305--305
+[]\OT1/cmr/bx/n/14.4 Current data anal-y-sis: de-tec-tion of non-standard
+ []
+
+[11 <./map_airport_filled.png>] [12] [13]
+Underfull \hbox (badness 4341) in paragraph at lines 386--386
+\OT1/cmr/m/n/10 wrong way has to go
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 390--391
+[]|\OT1/cmr/m/n/10 A po-ten-tial cross-ing
+ []
+
+
+Underfull \hbox (badness 1038) in paragraph at lines 392--392
+\OT1/cmr/m/n/10 tive path for other air-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 394--394
+[]|\OT1/cmr/m/n/10 The run-way ca-pac-ity
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 394--394
+\OT1/cmr/m/n/10 hasn't been ac-cu-rately
+ []
+
+
+Overfull \hbox (5.58028pt too wide) in paragraph at lines 382--397
+[][] 
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[14]
+<TempsRoulageDeicing.png, id=75, 752.8125pt x 698.61pt>
+File: TempsRoulageDeicing.png Graphic file (type png)
+<use TempsRoulageDeicing.png>
+Package pdftex.def Info: TempsRoulageDeicing.png  used on input line 409.
+(pdftex.def)             Requested size: 172.5pt x 160.07996pt.
+<TempsRoulageControl3.png, id=76, 752.8125pt x 698.61pt>
+File: TempsRoulageControl3.png Graphic file (type png)
+<use TempsRoulageControl3.png>
+Package pdftex.def Info: TempsRoulageControl3.png  used on input line 414.
+(pdftex.def)             Requested size: 172.5pt x 160.07996pt.
+
+Overfull \hbox (2.22221pt too wide) in paragraph at lines 408--418
+[][] [] 
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[15] [16 <./TempsRoulageDeicing.png> <./TempsRoulageControl3.png>] [17]
+[18] [19] [20] [21] (./main.aux) ) 
+Here is how much of TeX's memory you used:
+ 2513 strings out of 483183
+ 40770 string characters out of 5966292
+ 274647 words of memory out of 5000000
+ 17540 multiletter control sequences out of 15000+600000
+ 539183 words of font info for 46 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 48i,13n,46p,1021b,489s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/rita/.texlive2019/texmf-var/fonts/pk/
+ljfour/jknappen/ec/tcrm0500.600pk> </home/rita/.texlive2019/texmf-var/fonts/pk/
+ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmbx8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+bx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on main.pdf (21 pages, 1043633 bytes).
+PDF statistics:
+ 165 PDF objects out of 1000 (max. 8388607)
+ 108 compressed objects within 2 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+
