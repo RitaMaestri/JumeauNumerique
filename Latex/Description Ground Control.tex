@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{float}
+
+
+\title{Ground control}
+
+\begin{document}
+
+\maketitle
+\section{Sources of variability in the ground control}
+\subsection{Geographical splitting}
+First, we have to know that the ground control in \textit{Roissy-CDG} is split between two control towers: one for the north part and another one for the south part. Some tasks are different between the north and and south. For example, GCs on the north part have to handle with push-backs when there are some specific apron controllers who do that for the south part of the field (in fact from 10pm to 7am, there is no apron controller and the GCs have to handle it also on the south). For each part, there is a ground controller who can choose to split his part in two more sections which are covered by one specific radio frequency. If the ground controller works on the full part, he or she merges the two radio frequencies. So once the GC asks for a splitting, there is also a splitting of radio frequency. The only people who can ask for a splitting is the GC. It happens often too late and the handover becomes difficult. We have to understand that the more planes the GC has to follow, the less effective his or her work is, but also that when they choose to split the area, the communication between becomes essential and are not so easy given that they have to give instructions to planes they are in charge of, listen to them, think about their strategies, and speak to other controllers. Moreover, between two section, planes have to stop to ensure the security. So the splitting of the work is an decision which has some important effects on the taxitime. 
+\subsection{Next shift}
+Another event that can cause a lengthening of the taxitime is the arrival of a new shift. The current GC has to give information about the traffic, the weather, the tools' condition and in the same time continue following the planes. Moreover according to the time available for the current and the new GC, the change can be quite brutal and in high workload situation, it can difficult to handle. 
+\subsection{Ground controllers' tools}
+GCs work with only few tools:
+\begin{itemize}
+    \item Their eyes to see the planes, the traffic and to have a global picture of what happen in their section;
+    \item The radio to speak with pilots and with other controllers who are not on the same room. 
+    \item A radar screen to follow planes. It also provides information about speed, type of plane, assigned runway ...
+    \item Paper strips. Each plane is represented by a strip of paper on which the GC writes orders he gives to the plane. 
+\end{itemize}
+\section{ABM}
+Sources of variability in the work of GC that should be implemented in the ABM:
+\begin{itemize}
+    \item Variability in the decision of splitting. This decision is individual and can be take only by the GC. It could be see as a threshold, specific to each GC, of complexity and number of planes beyond which the GC asks for the splitting;
+    \item Effect of the splitting on the taxitime. The slipping enables CGs to have to handle less planes but it also forces GCs to work together and it makes the ground controlling more complex;
+    \item Variability in the arrival of a new shift: the shift can be more or less abrupt according to the GCs. The abruptness of the shift can degrade the communication and the work of the new GC and so affect the taxitime;
+    \item The 
+\end{itemize}
+\end{document}
