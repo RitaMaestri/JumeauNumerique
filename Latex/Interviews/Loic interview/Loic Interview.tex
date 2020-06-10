@@ -98,10 +98,17 @@ The GC can give a total or partial clearance to pilots. In particular, we can di
 \textbf{Departures}: the GC has to handle the aircraft from the pushback, if there are no apron services in his sectors. If there is the apron service, the GC receives the aircraft at the PAI. 
 In the first case, the GC gives the permission to push back (Ex. GC: ``\textit{AFR123, push back is approved facing west, call me back for taxi}" or ``\textit{AFR123, give way to the traffic rolling behind you and then push back is approved, call me back for taxi}" or ``\textit{AFR123, push back approved, could you make a long one to give way to AFR456 to roll ahead of you}"). 
 
-Then, the aircraft is ready for taxi. At this point the GC has to give the clearance. The clearance arrives until the last point included in the GC sector (which could be the holding point or Middle1(2,3,4))). The clearance could be total or partial, as in the arrival case.
+Then, the aircraft is ready for taxi. At this point the GC has to give the clearance. The clearance arrives until the last point included in the GC sector (which could be the holding point or Middle1(2,3,4)). The clearance could be total or partial, as in the arrival case.
 
-\subsection{Paths's strategies}
-Most of the time, the path chosen by GCs is linked to where the aircraft is coming from (the \textit{PAI} which is the way the aircraft is leaving the terminal) and which runway it is going to take-off from. It's normal that according to one \textit{PAI} you find many paths because first, the path will depend on which runway the aircraft is going to take-off from. For example, if you take the \textit{PAI A}, if the aircraft has to roll to the northern runway, GCs already have different paths regarding the configuration. If you take into consideration only the departures from the \textit{PAI A} to the runways \textit{27L} you'll see the path is different according to does the aircraft leaves the Terminal 1 via the taxiway \textit{NA1}, which is the one linked to the Terminal 1's east bound, or via the taxiways \textit{B} or \textit{D}.
+\subsection{Tower supervisor}
+He or she is in charge of the coordination with the whole world: weather conditions, emergencies, strategies, configuration changes, delayed or early aircrafts, deicing bay, DMAN...
+
+
+
+\section{Paths's strategies}
+Most of the time, the path chosen by GCs is linked to where the aircraft is coming from (the \textit{PAI} which is the way the aircraft is leaving the terminal) and which runway it is going to take-off from.
+It's normal that related to one terminal you find many paths because first, the path will depend on which runway the aircraft is going to take-off from and which \textit{PAI} it will use. For example, if you take into consideration only the departures from the Terminal 1 to the runways \textit{27L} you'll see the path is different according to if the aircraft leaves the Terminal via the \textit{PAI NA1}, which is the one linked to the Terminal 1's east bound, or via the taxiways \textit{B} or \textit{D}.
+
 From a given \textit{PAI} to a given runway, you have several potential paths but you don't have thousand. From the \textit{PAI NA1} to \textit{27L}, the only choice GCs have is taxiing via the taxiway \textit{N}, then via the taxiways \textit{Q} or \textit{B} and finally GCs are going to choose the holding point \textit{Q1}, \textit{Q2}, \textit{Q3}, \textit{Q4}, \textit{Q5} or \textit{Q6}. The difference in the path used could first be the holding point where they have to leave the aircraft to, for example if GCs have to go to holding points \textit{Q1}, \textit{Q2}, \textit{Q3}, they rather use the taxiway \textit{Q} and to split traffic, they are going to use the taxiway \textit{B} to reach holding points \textit{Q4}, \textit{Q5} and \textit{Q6}. For the southern part of the field, from any \textit{PAI} to any runway, GCs have 10 to 20 paths they can use because planes can turn left or right at almost every crossroads. The reasons for a non-standard path could be:
 \begin{itemize}
     \item an unusable taxiway (closed or work in progress or an aircraft stuck in it);
@@ -117,11 +124,10 @@ Pilots have a GPS with the map of the taxiways, but they have to know the names 
 
 The speed of taxiing is influenced by the knowledge that the pilot has of the airport.
 
-\section{Tower supervisor}
-He or she is in charge of the coordination with the whole world: weather conditions, emergencies, strategies, configuration changes, delayed or early aircrafts, deicing bay, DMAN...
+\section{Complexity of the traffic and workload}
+The traffic complexity that a GC has to deal with depends heavily on the number of sectors the GC handles. There are three possibilities: night time (all the sectors merged), day time in a nominal traffic (north or south par of the field) and peak hour (only a quarter of the field). The complexity depends also on the sector itself (for example if a GC is in charge of the south-east part of the field and they are facing east, he or she will have to deal with almost only arrivals and most of the time would be able to stick to the standard procedure). 
 
-\section{Complexity of the traffic}
-There are a lot of elements that bring complexity and these elements depend on the situation. The first variable that can change the definition of complexity is the number of sectors the GC handles and can be divided in three possibilities: night time (all the sectors merged), day time in a nominal traffic (north or south par of the field) and peak hour (only a quarter of the field). Then, there are also elements of complexity attached to the sector itself (for example if a GC is in charge of the south-east part of the field and they are facing east, he or she will have to deal with almost only arrivals and most of the time would be able to stick to the standard procedure). If we want to make a list of these elements, these are the main things to think about:
+Here is a list of situations that could increase the traffic complexity:
 \begin{itemize}
     \item Number of planes;
     \item Emergencies: fire, medical emergency, mechanic emergency... ; 
@@ -133,16 +139,20 @@ There are a lot of elements that bring complexity and these elements depend on t
     \item Restricted area;
     \item Towed aircraft\footnote{between maintenance areas and terminals or between terminals}: they are taxiing slowly and most of the time opposite way of the main flow of traffic;
 \end{itemize}
-As soon as there are plenty of elements that determine if a situation is complex or not, it would be more interesting to ask to GCs how they deal with a complex situation, no matter what it is. For example, in a non-complex situation, GCs have more time to think about non-standard procedures in order to optimise their strategies and try to fit to pilots' demands. On the other hand, in a very complex situation, the standard procedures could also be unenforceable and GCs would have to create an "brand-new" response to this situation.\\
-Finally, complexity can be measured by the number and importance of messages a GC has to deliver. The more messages a GC has to pass on, the less time is available to think about his or her strategy and so the more complex the situation becomes. At most, a GC can deliver around 6-7 messages\footnote{Pilots have to confirm that they received the message by repeating it so it doubles the length of a message.} per minute during a period a 10-15 minutes (it would be to difficult to carry on on that tempo during a longer period). 
+
+The complexity of the traffic has as a consequence an increase in the GC workload. 
+In a non-complex situation, the workload is low and the GCs have more time to think about non-standard procedures in order to optimise their strategies and try to fit pilots' demands.
+On the other hand, in a very complex situation, the standard procedures could also be unenforceable and GCs would have to create an ``brand-new" response to this situation.
+
+For the ABM, it is important to try giving a definition of workload. The workload can be measured by the number and importance of messages a GC has to deliver. The more messages a GC has to pass on, the less time is available to think about his or her strategy. At most, a GC can deliver around 6-7 messages\footnote{Pilots have to confirm that they received the message by repeating it so it doubles the length of a message.} per minute during a period a 10-15 minutes (it would be to difficult to carry on on that tempo during a longer period). 
 
 
 \section{ABM}
 Sources of variability in the work of GC that should be implemented in the ABM:
 \begin{itemize}
-	\item \textbf{Variability in the decision of splitting}. This decision is individual and can be take only by the GC. It could be see as a threshold, specific to each GC, of complexity and number of planes beyond which the GC asks for the splitting.
-	\item \textbf{Effect of the splitting on the taxitime}. The slipping enables CGs to have to handle less planes but it also forces GCs to work together and it makes the ground controlling more complex.
-	\item \textbf{Variability in the arrival of a new shift}. the shift can be more or less abrupt according to the GCs. The abruptness of the shift can degrade the communication and the work of the new GC and so affect the taxitime.
+	\item \textbf{Variability in the decision of splitting}. This decision is individual and can be taken only by the GC. It could be seen as a threshold, specific to each GC, of complexity and number of planes beyond which the GC asks for the splitting.
+	\item \textbf{Effect of the splitting on the taxitime}. The splitting enables CGs to have to handle less planes but it also forces GCs to work together and it makes the ground controlling more complex.
+	\item \textbf{Variability in the arrival of a new shift}. The shift can be more or less abrupt according to the GCs. The abruptness of the shift can degrade the communication and the work of the new GC and so affect the taxitime.
 \end{itemize}
 
 
