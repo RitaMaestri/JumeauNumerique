@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.18)  29 MAY 2020 18:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.5.18)  30 JUL 2020 11:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -89,20 +89,20 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 (./Report Project.aux)
 \openout1 = `"Report Project.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -129,11 +129,11 @@ e
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 12.
+(Font)              <12> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 12.
+(Font)              <8> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 12.
+(Font)              <6> on input line 13.
 
 [1
 
@@ -142,226 +142,236 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 5.
-)
+
+[2])
 \tf@toc=\write3
 \openout3 = `"Report Project.toc"'.
 
-
-[2] [3] [4] [5]
-<tabella.png, id=26, 496.35437pt x 553.06625pt>
+ [3] [4] [5] [6]
+<tabella.png, id=31, 496.35437pt x 553.06625pt>
 File: tabella.png Graphic file (type png)
 <use tabella.png>
-Package pdftex.def Info: tabella.png  used on input line 101.
+Package pdftex.def Info: tabella.png  used on input line 126.
 (pdftex.def)             Requested size: 256.0748pt x 285.33443pt.
- [6 <./tabella.png>]
-<companiesTaxiTime.png, id=32, 602.25pt x 526.21594pt>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[7] [8 <./tabella.png>]
+<companiesTaxiTime.png, id=39, 602.25pt x 526.21594pt>
 File: companiesTaxiTime.png Graphic file (type png)
 <use companiesTaxiTime.png>
-Package pdftex.def Info: companiesTaxiTime.png  used on input line 127.
+Package pdftex.def Info: companiesTaxiTime.png  used on input line 152.
 (pdftex.def)             Requested size: 180.67639pt x 157.866pt.
 
-Overfull \hbox (8.17639pt too wide) in paragraph at lines 127--128
+Overfull \hbox (8.17639pt too wide) in paragraph at lines 152--153
  [][] 
  []
 
 
-Overfull \hbox (5.22424pt too wide) in paragraph at lines 136--136
+Overfull \hbox (5.22424pt too wide) in paragraph at lines 161--161
 []|\OT1/cmr/m/n/5 Company| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 136--136
+Underfull \hbox (badness 10000) in paragraph at lines 161--161
 \OT1/cmr/m/n/5 over the
  []
 
 
-Underfull \hbox (badness 2799) in paragraph at lines 136--136
+Underfull \hbox (badness 2799) in paragraph at lines 161--161
 \OT1/cmr/m/n/5 to-tal n\TS1/cmr/m/n/5 ° \OT1/cmr/m/n/5 of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 136--136
+Underfull \hbox (badness 10000) in paragraph at lines 161--161
 []|\OT1/cmr/m/n/5 Mean
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 136--136
+Underfull \hbox (badness 10000) in paragraph at lines 161--161
 \OT1/cmr/m/n/5 Taxi
  []
 
 
-Overfull \hbox (0.74496pt too wide) in paragraph at lines 136--136
+Overfull \hbox (0.74496pt too wide) in paragraph at lines 161--161
 \OT1/cmr/m/n/5 Time(s)| 
  []
 
 
-Overfull \hbox (9.58716pt too wide) in paragraph at lines 135--146
+Overfull \hbox (9.58716pt too wide) in paragraph at lines 160--171
  [][] 
  []
 
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 124--151
+Overfull \hbox (15.0pt too wide) in paragraph at lines 149--176
 []$[]$
  []
 
-[7 <./companiesTaxiTime.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 173--173
+[9 <./companiesTaxiTime.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 198--198
 []|\OT1/cmr/m/n/10 Mean
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 173--173
+Underfull \hbox (badness 10000) in paragraph at lines 198--198
 []|\OT1/cmr/m/n/10 Mean
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 190--190
+Underfull \hbox (badness 10000) in paragraph at lines 215--215
 []|\OT1/cmr/m/n/10 Standard
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 190--190
+Underfull \hbox (badness 10000) in paragraph at lines 215--215
 []|\OT1/cmr/m/n/10 p value
  []
 
-[8]
-<n_avions_TempsRoulage.png, id=47, 581.17125pt x 344.03531pt>
+[10]
+<n_avions_TempsRoulage.png, id=53, 581.17125pt x 344.03531pt>
 File: n_avions_TempsRoulage.png Graphic file (type png)
 <use n_avions_TempsRoulage.png>
-Package pdftex.def Info: n_avions_TempsRoulage.png  used on input line 211.
+Package pdftex.def Info: n_avions_TempsRoulage.png  used on input line 236.
 (pdftex.def)             Requested size: 227.62204pt x 134.74542pt.
-<Distance.png, id=48, 602.25pt x 498.36188pt>
+<Distance.png, id=54, 602.25pt x 498.36188pt>
 File: Distance.png Graphic file (type png)
 <use Distance.png>
-Package pdftex.def Info: Distance.png  used on input line 222.
+Package pdftex.def Info: Distance.png  used on input line 247.
 (pdftex.def)             Requested size: 142.26378pt x 117.7234pt.
-<TempsAttente.png, id=49, 602.25pt x 498.36188pt>
+<TempsAttente.png, id=55, 602.25pt x 498.36188pt>
 File: TempsAttente.png Graphic file (type png)
 <use TempsAttente.png>
-Package pdftex.def Info: TempsAttente.png  used on input line 229.
+Package pdftex.def Info: TempsAttente.png  used on input line 254.
 (pdftex.def)             Requested size: 142.26378pt x 117.7234pt.
 
-Overfull \hbox (4.26588pt too wide) in paragraph at lines 229--230
+Overfull \hbox (4.26588pt too wide) in paragraph at lines 254--255
  [][] 
  []
 
 
-Underfull \hbox (badness 3354) in paragraph at lines 230--230
+Underfull \hbox (badness 3354) in paragraph at lines 255--255
 []\OT1/cmr/bx/n/8 (b) |\OT1/cmr/m/n/8 Com-par-i-son be-tween wait-ing
  []
 
-<Vitesse.png, id=50, 602.25pt x 498.36188pt>
+<Vitesse.png, id=56, 602.25pt x 498.36188pt>
 File: Vitesse.png Graphic file (type png)
 <use Vitesse.png>
-Package pdftex.def Info: Vitesse.png  used on input line 235.
+Package pdftex.def Info: Vitesse.png  used on input line 260.
 (pdftex.def)             Requested size: 142.26378pt x 117.7234pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (5.23727pt too wide) in paragraph at lines 267--267
+Overfull \hbox (5.23727pt too wide) in paragraph at lines 292--292
 []|\OT1/cmr/bx/n/10 Company| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 267--268
+Underfull \hbox (badness 10000) in paragraph at lines 292--293
 []|\OT1/cmr/bx/n/10 Frequency
  []
 
 
-Overfull \hbox (5.23727pt too wide) in paragraph at lines 275--275
+Overfull \hbox (5.23727pt too wide) in paragraph at lines 300--300
 []|\OT1/cmr/bx/n/10 Company| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 275--276
+Underfull \hbox (badness 10000) in paragraph at lines 300--301
 []|\OT1/cmr/bx/n/10 Frequency
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[9 <./n_avions_TempsRoulage.png (PNG copy)>]
-<map_airport_filled.png, id=54, 1515.6625pt x 833.1125pt>
+[11 <./n_avions_TempsRoulage.png (PNG copy)>]
+<map_airport_filled.png, id=60, 1515.6625pt x 833.1125pt>
 File: map_airport_filled.png Graphic file (type png)
 <use map_airport_filled.png>
-Package pdftex.def Info: map_airport_filled.png  used on input line 290.
+Package pdftex.def Info: map_airport_filled.png  used on input line 315.
 (pdftex.def)             Requested size: 345.0pt x 189.62872pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[10 <./Distance.png (PNG copy)> <./TempsAttente.png (PNG copy)> <./Vitesse.png 
+[12 <./Distance.png (PNG copy)> <./TempsAttente.png (PNG copy)> <./Vitesse.png 
 (PNG copy)>]
-Overfull \hbox (18.59456pt too wide) in paragraph at lines 305--305
+Overfull \hbox (18.59456pt too wide) in paragraph at lines 330--330
 []\OT1/cmr/bx/n/14.4 Current data anal-y-sis: de-tec-tion of non-standard
  []
 
-[11 <./map_airport_filled.png>] [12] [13]
-Underfull \hbox (badness 4341) in paragraph at lines 386--386
+[13 <./map_airport_filled.png>] [14] [15]
+Underfull \hbox (badness 4341) in paragraph at lines 411--411
 \OT1/cmr/m/n/10 wrong way has to go
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 390--391
+Underfull \hbox (badness 10000) in paragraph at lines 415--416
 []|\OT1/cmr/m/n/10 A po-ten-tial cross-ing
  []
 
 
-Underfull \hbox (badness 1038) in paragraph at lines 392--392
+Underfull \hbox (badness 1038) in paragraph at lines 417--417
 \OT1/cmr/m/n/10 tive path for other air-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 394--394
+Underfull \hbox (badness 10000) in paragraph at lines 419--419
 []|\OT1/cmr/m/n/10 The run-way ca-pac-ity
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 394--394
+Underfull \hbox (badness 10000) in paragraph at lines 419--419
 \OT1/cmr/m/n/10 hasn't been ac-cu-rately
  []
 
 
-Overfull \hbox (5.58028pt too wide) in paragraph at lines 382--397
+Overfull \hbox (5.58028pt too wide) in paragraph at lines 407--422
 [][] 
  []
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[14] [15] [16] [17] [18] [19] [20] (./Report Project.aux) ) 
+[16] [17] [18] [19]
+Underfull \hbox (badness 10000) in paragraph at lines 504--506
+
+ []
+
+[20] [21] [22] [23] [24] [25] [26] [27] [28] [29] (./Report Project.aux) ) 
 Here is how much of TeX's memory you used:
- 2494 strings out of 483183
- 40417 string characters out of 5966292
+ 2495 strings out of 483183
+ 40428 string characters out of 5966292
  272659 words of memory out of 5000000
- 17523 multiletter control sequences out of 15000+600000
+ 17524 multiletter control sequences out of 15000+600000
  539183 words of font info for 46 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  48i,13n,46p,1033b,489s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/rita/.texliv
-e2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0500.600pk> </home/rita/.texliv
-e2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmti12.pfb>
-Output written on "Report Project.pdf" (20 pages, 1020987 bytes).
+ </ho
+me/rita/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm0500.600pk> </ho
+me/rita/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmti12.pfb>
+Output written on "Report Project.pdf" (29 pages, 1055426 bytes).
 PDF statistics:
- 158 PDF objects out of 1000 (max. 8388607)
- 106 compressed objects within 2 object streams
+ 190 PDF objects out of 1000 (max. 8388607)
+ 128 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

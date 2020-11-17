@@ -5,6 +5,7 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{array}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\renewcommand{\abstractname}{Project status}
 \begin{document}
 	
 	\title{Report of \textit{Jumeau numérique} project}
@@ -12,6 +13,14 @@
 	\maketitle
 	
 \newpage
+\begin{abstract}
+	The road map of the project Jumeau Numérique estimated a first phase from November to December for the collection of bibliographical sources, a second from January to April for the analysis of the sources, the interviews with ground controller and the implementation of a first draft for the simulation and a third phase from May to July for the exploratory data analysis and the development of an agent based simulation. 
+	
+	Because of delays probably due to the difficulty in communication caused by corona virus, we interns had strong difficulties in gathering all the data and the information we needed. Furthermore the interviews, that were preparatory for the implementation of the agent based model, could start only in July. 
+	For this reason, we could not start with the development of an accurate agent based model, but we focused on the bibliographical research and the data analysis.
+	
+	To implement a simulation capable of including all the information collected through the interviews and the data analysis, at least other 3 months of work will be required.
+\end{abstract}
 
 \tableofcontents
 \newpage
@@ -39,7 +48,7 @@ Both those methods require the implementation of an automatic support tool for a
 On the contrary, the main purpose of our project is to investigate the human influence on taxi time.
 In fact, the management of the traffic on runways, taxiways and parking stands is the main task of the ground controllers (GC). Consequently, the efficiency of the schedule and of the taxi routes depends heavily on their decisions.
 
-Our work involve two parts, one as a function of the other. The data analysis is focused on the identification of patterns in the behavior of aircraft that use the airport platform and consequently in the strategy of GC. Once the strategies are well defined, with the help of interviews to GC and pilots, an ABM will be implemented. 
+Our work involve two parts, one as a function of the other. The data analysis and conducting some interviews with the GC aim at the identification of patterns in the behavior of aircraft that use the airport platform and in the strategy of GC. Once the strategies are well defined, with the help of interviews to GC and pilots, an ABM will be implemented. 
 
 An ABM allows to integrate infrastructural and human/organizational factors in the same simulation. In fact, the airport platform can be modeled as the environment in which the GC, the aircraft and the other agents act and interact, following precise strategies.
 
@@ -48,17 +57,27 @@ An ABM allows to integrate infrastructural and human/organizational factors in t
 \section{Turnaround operations}
 All the operations that take place from the moment when an aircraft lands to the moment when it takes off are named turnaround operations. It is fundamental to know them to be able to analyze the airport traffic flow. 
 
-An effective description of the turnaround operations is given in \cite{noortman}:
+\subsubsection*{Arrival} 
+The pilot has to tune on the frequency of the runway controller to receive the clearance to land. The runway controller is also the one that ensures the security distance between landing and departing aircraft. The landing aircraft have to cross the departure runway to access the taxiways. This operation is handled as well by the runway controller, that tells to the pilot the right moment to cross.
+The pilot changes his frequency on the on of the ground controller. The GC gives the clearance about the taxi route and eventually warns the pilot in case of conflict with other aircraft on the taxiway, telling him if he has to give way or if he has the priority.
+If the flight's stand is in Terminal 2, the pilot has once again to change his frequency on the one of the Apron controller, that guides him through the parking area of terminal 2. In terminal 1, it's the GC himself to lead the aircraft to the stand.
 
-``Arriving aircraft receive a landing approval when they are on final approach. Once touched down, these aircraft should leave the runway as quickly as possible to make room for the next aircraft. A taxi route is allocated by ATC [air traffic control, author's note], which guides the aircraft towards its stand. In case the gate is not available (shortly), the aircraft is guided to a holding position such that it does not block taxiways for other aircraft. In air transportation the standard holds that aircraft coming from the right have priority.
+The assigned stand depends on the airline that the flight belongs to. For example, Air France aircraft are placed at the stands of terminal 2.
+If the stand is not vacated by the time in which the new flight arrives, it will have to wait on the taxiway until the aircraft that is still occupying it pushes back.
 
-Once an aircraft has arrived at its stand, ground handlers have to perform multiple actions to get the aircraft ready for its next flight. These operations include disembarking, refuelling, cleaning, catering and boarding. Although an aircraft has a scheduled time to be released from its stand, delays are likely because of e.g. the aircraft arriving late, limited availability of resources, severe weather conditions or restrictions from EUROCONTROL [an international organisation whose aim is to guarantee safe air traffic management across Europe, that coordinates the A-CDM project, described below, author's note].
+\subsubsection*{At the stand} 
+When the aircraft is at the stand, there are several operations that have to be accomplished, i.e. disembarking, refueling, cleaning and boarding.
+Some times, the aircraft needs some special maintenance, or it is supposed to depart from a stand different from the one in which it arrived. In this case, the aircraft is towed to its destination by a tow tractor, a quite slow vehicle that uses the taxiways to carry the aircraft. 
 
-Once ready, the departing aircraft notifies ATC and, if the situation allows, a start-up approval is given, followed by a push back approval. This allowance depends on multiple conditions, including whether vehicles and personnel have left the stand and whether direct push-back would be possible.
-After its push back, the aircraft receives a taxi route and approval to taxi. Depending on its route, approval might be required to cross specific points in the airport infrastructure, including a runway. When arriving at the runway, the departing aircraft once again waits for approval from ATC to line up and take off."
+\subsubsection*{Departure} 
+Every flight is assigned a TOBT (Target off block time), the time when an aircraft should begin the push-back procedure, calculated by the Aircraft Operators, to take off at the scheduled time.
+Aircraft may be late or in advance with respect to the TOBT, for this reason they have to communicate when they are ready to the Delivery controller, that is in charge of giving the departure clearance. This clearance is based on the TSAT (Target Start Up Approval Time), calculated by a planning system called DMAN, and on the availability of space around the stand area.
+Once the departure clearance is obtained, the pilot tunes on the Apron Controller frequency (or on the ground frequency for terminal 1), that gives instruction for the push back. Once the aircraft finishes the push back and exits the parking area, the ground controller gives the taxi route clearance to the pilot, and monitors his movements to prevent conflicts with other aircraft. 
+
+Once arrived at the holding point near the runway, i.e. the area where the queue for departures forms, the ground controller communicates to the pilot his number in the sequence of departure. After this moment, the pilot has to tune on the frequency of the runway controller, that gives him the clearance to enter the runway, align and begin the take off.
 
 
-At CDG airport, those operations involve many different agents and are coordinated thanks to the Airport-Collaborative Decision Making procedure (A-CDM).
+At CDG airport, these operations involve several agents agents and are coordinated thanks to the Airport-Collaborative Decision Making procedure (A-CDM). 
 
 \section{A-CDM and airport agents}\label{ACDM}
 The A-CDM is an EUROCONTROL project that aims to ameliorate the information sharing between airport partners and consequently the efficiency of the airport. In particular, arrival predictability, TOBT predictability and Take-Off predictability are increased by the use of A-CDM procedure\cite{ACDMimpact}.
@@ -74,7 +93,7 @@ The main stakeholders involved in the A-CDM procedure are:
 The operational core of A-CDM system is the pre-departure sequencer, also called Departure Manger (DMAN). The DMAN is a planning tool calculates the Target Take Off Times (TTOT) and the Target Startup Approval Times (TSAT, the time when an aircraft should begin the push-back procedure calculated by the DMAN) based on the information gained thanks to the A-CDM procedure.
 
 \subsection{DMAN inputs}
-The main goal of the DMAN is to calculate TSAT (Target Startup Approval Time) based on the TOBT (Target off block time, the time when an aircraft should begin the push-back procedure calculated by the Aircraft Operators), and TTOT adding to the TSAT the estimated taxi time. 
+The main goal of the DMAN is to calculate TSAT (Target Startup Approval Time) based on the TOBT, and TTOT adding to the TSAT the estimated taxi time. 
 When elaborating the pre-departure sequence the Basic DMAN takes into account \cite{DMAN}:
 \begin{itemize}
 \item Existing CFMU (Central Flow Management Unit, an EUROCONTROL organ) slots (CTOT, calculated off-block time): many aircraft must depart within a time interval of 15 minutes not to loose the clearance;
@@ -82,14 +101,20 @@ When elaborating the pre-departure sequence the Basic DMAN takes into account \c
 \item Basic runway constraints such as capacity and pressure, provided from the Tower Supervisor;
 \item Aircraft Wake Vortex separations (optional);
 \item Standard Instrument Departure (SID) and Minimum Departure Interval (MDI).
+\item Runway choice strategy, provided by the tower supervisor
 \end{itemize}
+
+TODO
 
 \subsection{DMAN output}
 
 DMAN has an human-machine interface for Delivery Controllers, who are in charge of  of giving the departure clearance to the aircraft. The output of the DMAN consists in a list of flights that should begin their push-back in the next 45 minutes, with the respective suggested TSAT. The list is updated every 30 seconds.
 
-The DMAN gives as an output also the suggested runway, that in exceptional cases can be changed by delivery or ground controller 15 minutes before the TSAT. In this case, the new runway is given as an input to the DMAN, that recomputes the departure sequence. 
 
+The DMAN gives as an output also the suggested runway, that in exceptional cases can be changed by delivery or ground controller 15 minutes before the TSAT. In this case, the new runway is given as an input to the DMAN, that recomputes the departure sequence. 
+The runway is chosen by the DMAN following a strategy inputted in the DMAN by the tower supervisor.
+
+To be noticed is the fact that the time at which an aircraft begin its push back is decided by the DMAN and not by the controllers. This can lead to operational inefficiencies, because the DMAN does not bases its decisions on what is happening on the taxiway. For example, it could happen that an aircraft that just finished its push back cannot travel further because the taxiway is occupied by another aircraft that is doing the push back. Or, as well, a taxiway may be completely blocked because of a stuck aircraft, and instead of waiting for it to be removed at the stand, all the aircraft push back and then queue in the middle of the taxiway. The DMAN showed to increase efficiency \cite{manual}, but there are some improvements that can still be done during unexpected events.
 
 \section{Actors}
 Below is a table that lists the actors involved in the airport platform management and their responsibilities \cite{DMAN}.
@@ -370,7 +395,7 @@ Something to be noticed is that the standard paths in the GC booklet contains on
 This analysis has to be completed and the results are not available yet.
 
 
-\subsection{Inspection of long taxi times}
+\subsection{Issue in the inspection of long taxi time}
 
 One of the strategies that could be used to analyze the causes of delays during taxiing is to isolate the flights with a long taxi time and try to detect the causes of it through the data. 
 
@@ -398,12 +423,225 @@ Some examples of operational and physical causes of delay are showed in table \r
 	\label{causes}
 \end{table}
 
-To detect the main contributor to the long taxi times (and eventually the physical/operational cause), we isolated the flights with taxi times higher than 30 minutes to see, with the intention to analyze the waiting times during taxiing an the one at the runway. But for these flights, the data set showed big inconsistencies. We are still waiting for an answer from the airport crew about this issue.
+From the table, we can notice that the same measurable phenomenon can have really different causes. It's really difficult 
+
+TODO
+
+\newpage
+
+
+\part{Interviews}
+Thanks to the interviews with the GC and the pilots, we are able to describe in detail their job and their influence in the taxi time
+
+\section{Ground Controller}
+
+\subsection{Organization of the work}
+\paragraph{Geographical splitting:}There are three control towers where the ground controller can work: southern, northern and central. The central tower is used at night, from 10 pm to 6:30 am, and at most 3 ground controllers can work there at the same time. The southern and northern towers are used during day time, and at most 2 ground controllers can work at the same time in each of the two tower. So, during daytime there can be at most 4 ground controllers working at the same time.
+
+During daytime, there are 4 PAI (point d'arret intermediaire) between the northern ground and the southern ground: Middle1 (taxiway N), Middle2 (F), Middle3 (B) and Middle4 (Q). Those points are the borders between north sector and south sector.
+
+Some tasks are different between the north and and south. For example, GCs on the north part have to handle with push-backs when there are some specific apron controllers who do that for the south part of the field (in fact from 10pm to 7am, there is no apron controller and the GCs have to handle it also on the south). 
+
+In the northern (southern) tower, there is a ground controller always working, and a backup ground controller that begins to work whenever the first GC choose to split his sector in two. Each sub-sector is covered by one specific radio frequency. When the ground controller works on the full northern(southern) sector, he or she merges the two radio frequencies.
+
+In same room of the ground controllers, we can also find the delivery controller and the runway controller workstations. The apron controller and the tower supervisor work in separate rooms.
+
+\paragraph{Working shift:} In an 8 hour shift, there is a team of 2 or 3 ground controllers working for each tower. Each one of them is in charge of the traffic for one hour, then they have a break for another hour. During the break, they have to be ready for a split, in case the ground controller in charge needs it, or to answer to the phone calls coming from other controllers, if they notice that their colleague can't handle them alone. 
+
+
+\subsection{Tasks}
+
+GC job is leading an aircraft safely from the apron area to the runway entrance. 
+
+What he is in power of deciding is:
+\begin{itemize}
+	\item the taxi route for the flights;
+	\item the moments and the place where aircraft have to stop during taxiing, for example to give way to another aircraft;
+	\item the runway entrance;
+	\item the sequence of departures at the holding point;
+	\item a change of runway in agreement with the supervisor and the pilot.
+\end{itemize}
+
+\subsection{Tools}
+To take his decisions, the GC takes into consideration different information, that he gains through his tools and through the communication with other controllers and airport actors.
+
+The tools he uses are the following:
+
+\begin{itemize}
+	\item \textbf{Ground radar screen.} It contains an interactive map of CDG airport platform (it is possible to zoom in and out). The GC usually chooses to zoom on its sector, but to keep an open window on other sectors to be able to anticipate if an aircraft is directed towards his sector.	
+	On the map, the position of each aircraft on the platform is constantly updated. To each aircraft position is associated its identification code, speed and aircraft type, through a tag over the position of the aircraft.
+	The blue tags are for departures, the red ones are for arrivals. The blue tags appear on the screen a few minutes before the push back.
+	\item \textbf{View.} The information about aircraft position is gained by direct sight, too.
+	\item \textbf{Paper strip.} In front of the GC there is a wooden holder that can host 20 paper strips. Each paper strip corresponds to an aircraft that the ground controller has to handle. Some important information is already written on the strip when it's printed, and some other information is added by the GC.
+	In particular, when it's printed we can find: the aircraft ID, the type of departure, runway of departure, stand number. Furthermore, arriving aircraft and departing aircraft can be distinguished by the color of the strip (blue for departures, white for arrivals). 
+	The GC will add: the proposed holding point at the runway, the path.
+	
+	The ground controller places the strips on the wooden carrier in positions that help him remind the priorities of the various aircraft.
+	
+	The strips are printed 10-15 minutes before the aircraft lands in case of arrivals, as soon as the delivery controller gives the permission for the startup, usually 10 minutes before the startup, in case of departure.
+	
+	\item\textbf{Sky radar screen.} It shows the position of aircraft that are flying around the airport.
+	\item\textbf{Frequency regulator.} It allows to transmit, monitor and group frequencies.
+	\item\textbf{Radio.} It is used for communications with the pilots.
+	\item \textbf{Phone.} It is used for communications with the controllers that are not in the same tower.
+	
+	
+\end{itemize}
+
+
+
+\subsection{Communication}
+\subsubsection*{Ground controllers}
+In order to coordinate the work of ground controllers, they use to exchange a lot of information. They can do it directly or by using their phones, if it is easier. They are exchanging information about current planes, potential sources of traffic's complexity or incoming strategy.
+
+\subsubsection*{Runway controller}
+The RC and the GC do not communicate if not necessary. The standard procedure is described below:
+
+\textit{Arriving aircraft}: the runway controller tells the pilot to set the frequency on Ground Control once the aircraft has crossed the departure runway (in fact, because of the configuration of runways, an arriving aircraft has always to cross the departure runway to get to the stand). 
+He is in charge of deciding the exit taxiway from the runway.
+
+
+\textit{Departing aircraft}: in standard situations, the GC just passes the paper strip containing all information about the aircraft to the runway controller when it's the right time.
+\\
+
+When the situation requires it (often in rush hours) they exchange the following messages:
+\begin{itemize}
+	\item (From RC to GC)The runway controller can change the holding point decided by the ground controller if he says it early enough. He can ask for a change of holding point up to the moment when it's not possible for the ground controller to warn the pilot in time, so also 2 minutes before the aircraft gets to the holding point. But he usually does it when the aircraft is far away, for example when there is an aircraft stuck at the holding point.(Ex. ``\textit{I've got a stuck aircraft on Q4, can you please put AFR123 on Q5?}")
+	
+	\item(From GC to RC)The GC always has to explicitly communicate to the runway controller when he's not using an usual entrance to the runway, to avoid accidents. 
+	
+	\item(From GC to RC) The GC warns the RC if an arriving aircraft is late, so that the RC can make it cross the departure runway instead of start a take off (Ex. ``\textit{AFR123 needs to be at the stand in 5 minutes, can you give it the priority?}")
+\end{itemize}
+
+
+\subsubsection*{Delivery controller}
+The RC and the GC do not communicate if not necessary. There can be two main reason for speaking with the delivery controller:
+\begin{itemize} 
+	\item The GC is contacted by a pilot asking for a push-back ealier than the TSAT. He or she then calls the delivery controller to check if it's ok to push-back. 
+	\item The GC is contacted by a pilot who has a problem and will not be able to start a the planed hour, so he or she calls the delivery controller to put back the flight in the DMAN (that will re-calculate the TSAT).
+\end{itemize}
+\subsubsection*{Apron controller}
+In nominal situation there is no communication as long as standard procedures are respected. The GC only tells to pilots to change the frequency.
+\\
+In low traffic condition, they may not communicate conditions even if the GC chooses a non-standard PAI: if the pilot is asked to change his frequency soon enough, the apron controller has the time to realize that he's receiving an aircraft at the wrong PAI.
+\\
+When the situation requires it (really often in peak hours) they exchange the following messages:
+
+\begin{itemize}
+	\item When there is an aircraft arriving and one leaving the apron area, so it's not clear who has the priority.
+	\item (GC to AC as well as AC to GC) GC or AC needs to use a PAI which is not the standard one. (Ex. Apron to Ground:\textit{"I'd like to put AFR123 on TA2, is it ok for you?"``no, there is a tugged aircraft crossing that way"} or Ground to Apron:\textit{"\textit{Is it ok if I pull AFR123 on TE3}?"``No, I've got a push back there, go to TE2"})
+\end{itemize}
+
+
+\subsubsection*{IFR room}
+This interaction does not happen often, and it usually passes through the supervisor. A GC can make the following requirements when there are some serious traffic issues:
+\begin{itemize}
+	\item reroute an aircraft to another runway;
+	\item make an aircraft wait in the sky.
+\end{itemize}
+
+\paragraph{Ground handling services:}
+It's usually the tower supervisor that handles the communications with ground handling services. They could be called:
+\begin{itemize}
+	\item to ask for a tug;
+	\item to ask for the opening of a deicing bay.
+\end{itemize}
+
+\subsubsection*{Pilots}
+Pilots can not do something without the clearance gived by the GC. 
+They are talking together by radio, using the frequency that covers this geographical part of the field. Between each section pilots have to change the frequency they are using and wait to get in touch with the new GC before carrying on their taxiing. 
+
+The GC can give a total or partial clearance to pilots. In particular, we can distinguish different kinds of messages based on if the aircraft is arriving or departing.
+
+\textbf{Arrivals}: the runway controller gives the clearance to land or to stay in the sky and the clearance to cross the inner runway or to stop at the waiting point. When the pilot is about to finish the crossing calls the ground controller(Ex.pilot:"\textit{AFR123. We are crossing runway 27L at D6.}). There are several possibilities here:
+
+\begin{itemize}
+	\item the GC doesn't answer because he's too busy handling the other aircraft. In this case the aircraft stops.
+	\item the GC answers but doesn't have time to give the clearance, so he just says that he'll call back. In this case the aircraft stops (Ex. GC: ``\textit{AFR123, I'll call you back}").
+	\item the GC gives the clearance only about the first move (ex. turn left) and he calls back later (Ex. GC: ``\textit{AFR123, turn left and I'll call you back}").
+	\item There are not many aircraft in the sector handled by the GC, so he will give the whole clearance, until the stand or until Middle1(2,3,4) (Ex. GC: ``\textit{AFR123, turn right on D and left on F, stop at Middle2}").
+	\item There are many aircraft in the sector so the GC is not able to give the whole clearance, but only a partial one. The partial clearance includes the instruction to hold at a certain point in the taxiway, or to give priority to another aircraft (Ex. GC: ``\textit{AFR123, turn left on D and right on F, then hold short at B}" or ``\textit{AFR123, turn left on D then give way to AFR456 from your right}").
+	\item In bad weather condition, the GC have to change the clearance they give because the pilots cannot see the other aircraft on the platform(Ex. they cannot say ``\textit{AFR123, turn left on D then give way to AFR456 from your right}", but they have to say ``\textit{AFR123, hold short at E}")
+\end{itemize}
+
+\textbf{Departures}: the GC has to handle the aircraft from the pushback, if there are no apron services in his sectors. If there is the apron service, the GC receives the aircraft at the PAI. 
+In the first case, the GC gives the permission to push back (Ex. GC: ``\textit{AFR123, push back is approved facing west, call me back for taxi}" or ``\textit{AFR123, give way to the traffic rolling behind you and then push back is approved, call me back for taxi}" or ``\textit{AFR123, push back approved, could you make a long one to give way to AFR456 to roll ahead of you}"). 
+
+Then, the aircraft is ready for taxi. At this point the GC has to give the clearance. The clearance arrives until the last point included in the GC sector (which could be the holding point or Middle1(2,3,4)). The clearance could be total or partial, as in the arrival case.
+\subsection{Strategy}
+\subsubsection{Path strategy}
+The interviews with the GC showed that their strategy can be modeled in completely different ways, according to the situation. In particular, identified the following scenarios, associated to the respective behavior:
+
+\begin{itemize}
+	\item \textbf{High traffic scenario.} Up to four GC work at the same time in the control tower, each one of them checking over one portion of the airport platform. The GC follow the standard taxiways as much as possible. Their strategy is then well defined, and it should usually lead to predictable outcomes. 
+	The rules that GC must keep in mind include the following examples \cite{livret}.
+	\begin{itemize}
+		\item Large aircraft cannot travel along some specific taxiways for safety reasons.
+		\item Every parking area has some strict rules that regulate the entrance and the exit of aircraft (one way routes, etc.).
+		\item A standard path is associated to every couple \textit{Parking Area, Runway}.
+		\item The direction of one way taxiways changes based on the orientation of the runway (face east or west).
+	\end{itemize}
+	In this scenario, there are few reasons why a GC may deviate from the standard taxiway:
+	\begin{itemize}
+		\item an unusable taxiway (closed or work in progress or an aircraft stuck in it);
+		\item holding points strategies (change the order at the holding point);
+		\item priority strategies;
+		\item splitting sectors strategies (if the colleague needs an aircraft in a specific taxiway because the alternative taxiway is too busy, even not using the standard direction);
+	\end{itemize}
+	\item \textbf{Low traffic scenario.} This situation happens at night, when one of the two couples of runways is closed. Only one GC is operating, and he controls the whole airport platform. The GCs can decide not to follow standard taxiways to gain some seconds in taxi times, since there is no danger of accident with other aircraft.
+	
+	\item \textbf{Non-standard scenario.} It's the case of bad weather conditions, aircraft stuck in the middle of the taxiway, unexpected runway closure, taxiway closure etc. Expecially in rush hours, the workload for GC in those cases is really high, since they have to think about a solution in a small amount of time. The strategy here is not well defined.
+\end{itemize}
+
+\subsubsection{Holding point strategy}
+The taxiway used determines the length of the runway, that has to match the aircraft performance. The pilots make a performance computation for each entry, this way they can set up the engine and the take off speed. 
+
+Usually, the standard entrances are used. Those taxiways can be chosen by GC without warning the pilot in advance. There are 2 standard entrances: the one that corresponds to the shortest runway is used for the medium aircraft, the other is used for the wide body aircraft. What happens with the interaction with the pilot is that the GC proposes an entry and if the pilot doesn't complain, it's a deal.
+
+There are a few cases in which the standard procedures are not followed. 
+
+For example, if an aircraft is traveling on a taxiway parallel to the runway, but in the opposite direction of the runway flow, the GC may choose the entrance that makes the runway the shortest possible, to reduce the taxi time. When they assign a non-standard taxiway, they have to provide for the length of the runway in their clearance. They have to propose it to the pilot in advance and he has to agree or not, or it can happen the opposite: the pilot proposes it (maybe because he wants to avoid the queue on the standard taxiways) and the GC has to agree. For example, Lufthansa flights are park at the north of terminal 1, and the aircraft is usually not big because they go to Germany. They often request Q2 (entrance with shortest runway) to be quicker in the taxiing and to avoid the queue in Q4 and Q5 (standard entrances).
+
+Another example of non standard procedure is when the GC has to deal with aircraft of different types, one after another. In fact, in this case there are safety constraints on the time between two consecutive flights because of the wind turbulence generated by the first one. For example, if a medium aircraft departs right after a heavy aircraft from the same taxiway, it will have to wait at least 2 minutes. If it uses a taxiway that makes the runway shorter, it will have to wait 3 minutes.
+\subsection{Human factor}
+Every decision of the ground controller may influence the taxi time of an aircraft. The most evident one is the choice of a taxi route, but other important decisions may be the order in which deliver the messages to the pilots in case they are more than one at the same time, the priority strategy in case of conflict, the holding point strategy, the decision to split, the promptness in dealing with a problem or an emergency.
+
+From the interviews with the GC, what they consider fundamental to handle efficiently the traffic are the following factor.
+\begin{itemize}
+\item \textbf{Splitting.}The splitting of the work is an decision which has some important effects on the taxi time. When the GC choose to split the area, the communication between him and the beackup GC becomes essential because he has to give instructions about the current state of traffic. But at the same time, he has to give instructions to planes he is in charge of, listen to them, think about his strategy, and speak to other controllers. Moreover, between two sections, planes have to stop to ensure the security.
+\\
+Accomplishing the splitting procedure takes approximately five minutes.
+
+\item \textbf{Shift of GC in the workstation.}
+Another event that can cause a lengthening of the taxitime is the arrival of a new GC. The current GC has to give information about the traffic, the weather, the tools' condition and, at the same time, continue following the planes.\\
+Moreover, according to the time available for the current and the new GC, the change can be quite brutal. In high workload situation it can be difficult to handle.
+
+\item \textbf{Frequency change.}
+The first reason why an aircraft slows down or stops is because he's not receiving orders from the ground control. This happens especially when the pilot has to change frequency when he enters a new sector (from east to west or from north to south and vice versa): if the new GC isn't quick enough in giving the clearance to the new aircraft, the pilot will stop at the PAI.
+How does the switch between frequencies happens? The first ground controller, that has taken care of the aircraft until the PAI, tells the pilot to switch the frequency at that point, to be able to speak with the new ground controller. It can happen that the GC does not warn the pilot in time, and the pilot crosses the PAI and continues taxiing without changing the frequency also for 500 m, until he's told to change. This happens once or several times a day, and it is a safety issue.
+
+\item \textbf{Priority strategy.}
+The aircraft may face other aircraft while he uses the assigned path. In this case, the ground controller has to give the priority to one of the two based on the slot, type of aircraft.
+
+\item \textbf{Apron Area Management.}
+Especially in terminal 1, which is the oldest and less efficient terminal in terms of traffic, you could have issues of priority between arriving and departing aircraft. A case that often happens is that an aircraft cannot enter the taxiway A in terminal 1 because another aircraft is pushing back, occupying the taxiway. In this case, one of the two has to stop (pushing back or entering the apron area). The same happens in terminal 3, where there is only one way for entering and exiting. 
+
+\end{itemize}
+
+\subsubsection*{Workload}
+The most important concept related to the human factor that came out form GC interviews is the workload. The efficiency of the performance of GC is heavily influenced by it.
+
+High workload in fact can prevent the GC to think about the best decision in terms of time optimization: he may choose the standard path instead of a short cut because he doesn't have time to think about an alternative path, he may tell a pilot to wait in the middle of the taxiway because he has no time to monitor his travel, he may choose a non-optimal sequence at the holding point.
+
+What creates a high workload for the GC is the complexity of the traffic.
+It depends heavily on the number of sectors the GC handles. There are three possibilities: night time (all the sectors merged), day time in a nominal traffic (north or south par of the field) and peak hour (only a quarter of the field). The complexity depends also on the sector itself. Below a list of situation that increase the complexity of the traffic and that depend or not on the sector in which the GC is working.
+
+
 
 \newpage
 \part{Agent Based Model}
 
-\section{Current agent based model}
+\section{Current and new agent based model}
 
 The model we developed during the first period of the project is quite simple, and it involves only aircraft agents.
 
@@ -415,50 +653,20 @@ The model just described is basically a queuing model. When the demand (aircraft
 
 But given the complexity of the airport platform, this model isn't sufficient. Moreover, it doesn't take advantage of the strength of agent based models, that is the possibility of modeling heterogeneous agents to see if the interaction between them leads to some emergent behaviors of the system.
 
-\section{Ideas for a new ABM}
-We would like to build a model in which detailed structural information, namely the airport taxiway structure, are integrated with human/operational factors, namely the strategy followed by the agents involved in the taxiing operations. Both these elements are described in the next sections.
+We would like to build a model in which detailed structural information, namely the airport taxiway structure, are integrated with human/operational factors, namely the strategy followed by the agents involved in the taxiing operations. The main agents of the simulation are going to be the pilots/aircraft and the ground controllers, but other agents could be included (see section  \ref{other-agents}).
+
 
 \subsection{Airport structure}
 
 We decided to include a detailed simulation of the airport structure because of the results showed in section \ref{exploratory}. In fact, the mean of the distribution of taxi times depends on the distance traveled by the aircraft, therefore by the position of the stand and of the runway. The airport platform can be modeled as a network whose nodes are the parking areas and the intersection between taxiways, while the edges are the taxi routes. The weight of the edge is going to be equal to the route's length.
 
-To build this kind of network, data about the airport structure are necessary. We required them and we are waiting for an answer from DGAC.
+In an advanced version of the simulation, it could be interesting to include also the slopes of the taxiways, since they seem to produce emergent congestion phenomena (i.e. the slope towards south on the taxiways at the south east part of the airport platform, E, R, T).
 
-\subsection{Agents and their behaviour}
-The objective of the simulation is to reproduce the behavior of the agents involved in the taxiing operations, and eventually find a better strategy. 
-The main agents of the simulation are going to be the pilots/aircraft and the ground controllers, but other agents could be included (see section  \ref{other-agents}).
+To build this kind of network, we are going to use the AUTOCAD data provided from the airport.
 
-\subsubsection{Ground Controller}
+\subsection{Ground Controller}
 
-Thanks to an interview with the GC, we are able to describe roughly their behavior and tasks, but further interactions are necessary to examine this topic in depth. 
-
-GC task is leading an aircraft safely from the apron area to the runway entrance. In particular, they take in charge an aircraft at the PAI (point d'arret intermediaire), an area situated at the exit/entrance of the apron area (i.e. the parking area). From the time when the push back starts to the PAI, the aircraft supervised by the apron controller, but the ground controller knows that he is going to manage an aircraft since the beginning of the push back. 
-
-To be noticed is the fact that the time at which an aircraft begin its push back is decided by the DMAN and not by the controllers. This can lead to operational inefficiencies, because the DMAN does not bases its decisions on what is happening on the taxiway. For example, it could happen that an aircraft that just finished its push back cannot travel further because the taxiway is occupied by another aircraft that is doing the push back. Or, as well, a taxiway may be completely blocked because of a stuck aircraft, and instead of waiting for it to be removed at the stand, all the aircraft push back and then queue in the middle of the taxiway. The DMAN showed to increase efficiency \cite{manual}, but there are some improvements that can still be done during unpredictable events.
-
-At the PAI, the exchange between apron and ground controller should be done as quickly as possible, but some times delays in this operation can cause waiting time at the PAI. 
-The ground controller communicates to the pilots the path they have to follow and the runway they have to use. The last information is suggested by the DMAN based on the strategy that the tower supervisor gives it as an input. The ground controller can decide not to follow the suggestion of DMAN about the runway, but he usually does, especially in high workload situation. 
-
-The ground controller then leads the aircraft to the runway checking if there are conflicts with other aircraft (what does he do if there are conflicts? It's a question for the interview).
-Once arrived at the holding point before the runway, the aircraft is taken in charge by the runway controller. In the case landing aircraft, the GC leads the aircraft form the runway to its stand. If the stand isn't free, he has to decide a point on the taxiway where the aircraft can wait.
-
-The interviews with the GC showed that their strategy can be modeled in completely different ways, according to the situation. In particular, identified the following scenarios, associated to the respective behavior:
-
-\begin{itemize}
-	\item \textbf{High traffic scenario.} Up to four GC work at the same time in the control tower, each one of them checking over one portion of the airport platform. The GC follow the standard procedures as much as possible. Their strategy is then well defined, and it should usually lead to predictable outcomes. 
-	The rules that GC must keep in mind include the following examples \cite{livret}.
-	\begin{itemize}
-		\item Large aircraft cannot travel along some specific taxiways for safety reasons.
-		\item Every parking area has some strict rules that regulate the entrance and the exit of aircraft (one way routes, etc.).
-		\item A standard path is associated to every couple \textit{Parking Area, Runway}.
-		\item The direction of one way taxiways changes based on the orientation of the runway (face east or west).
-	\end{itemize}
-	\item \textbf{Low traffic scenario.} This situation happens at night, when one of the two couples of runways is closed. Only one GC is operating, and he controls the whole airport platform. The GCs can decide not to follow standard procedures to gain some seconds in taxi times, since there is no danger of accident with other aircraft.
-	\item \textbf{Non-standard scenario.} It's the case of bad weather conditions, aircraft stuck in the middle of the taxiway, unexpected runway closure, taxiway closure etc. Expecially in rush hours, the workload for GC in those cases is really high, since they have to think about a solution in a small amount of time. The strategy here is not well defined, and it will be object of further investigation during the interviews.
-\end{itemize}
-
-Our model will hopefully include 3 different strategy models for those three different scenarios, that will be investigated thanks to the interviews with the ground controllers.
-
+For the ABM, it is important to try giving a definition of workload. The workload can be measured by the number and importance of messages a GC has to deliver. The more messages a GC has to pass on, the less time is available to think about his or her strategy. At most, a GC can deliver around 6-7 messages\footnote{Pilots have to confirm that they received the message by repeating it so it doubles the length of a message.} per minute during a period a 10-15 minutes (it would be to difficult to carry on on that tempo during a longer period). 
 
 \subsubsection{Pilots}
 
@@ -469,11 +677,6 @@ The pilots have the task to inform the controllers when they are ready to push b
 From the interviews with GCs, it emerged that once the taxiing has begun the pilots have little autonomy while taxiing, since they have to follow the path indicated by ground controllers.
 Nevertheless, they have the autonomy to choose the speed of taxiing.
 
-\subsection{Further investigation: the interviews}
-We have already planned some interviews with GC and pilots. 
-They aim at better understand the behavior of both GC and pilot agents. In particular, they will focus on the description of the interactions between pilots and GC, between GC and DMAN and on the degree af autonomy that pilots have with respect to GC and that GC have with respect to DMAN. 
-
-In addition, the interview to the GC will explore their interactions with the tower supervisor and other agents involved in the taxi operations.
 
 \subsection{Doubts: operational range of the simulation and other agents}\label{other-agents}
 The complexity of the airport system detailed in section \ref{ACDM} requires a special regard in the choice of the operational range described by the simulation, and of the list of agents involved.

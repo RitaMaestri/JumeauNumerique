@@ -1,14 +1,80 @@
 setwd("/home/rita/Documents/Universita/Stage/Projet\ Jumeau\ Numérique/")
 load("~/Documents/Universita/Stage/Projet Jumeau Numérique/myData.RData")
 
-
 load("~/Documents/Universita/Stage/Projet Jumeau Numérique/Analyse_18_19.RData")
+
+load("~/Documents/Universita/Stage/Projet Jumeau Numérique/DataTempOrdered.RData")
+
+#Import Dataset-----------
+setwd("/home/rita/Documents/Universita/Stage/Projet\ Jumeau\ Numérique/NewData/sol")
+library(readr)
+dir <- getwd()
+
+List_days <- list.files(path = dir, pattern = "0.sol")
+
+DataTemp <- read_tsv(file = List_days[], skip = 1, col_names = colnames(Data))
+
+for (Day in 1:length(List_days)){
+  Data_Day <- read_tsv(file = List_days[Day], skip = 1, col_names = colnames(DataTemp))
+  DataTemp<- rbind(DataTemp, Data_Day)
+}
+
+#add small.sol
+List_days <- list.files(path = dir, pattern = "small.sol")
+
+for (Day in 1:length(List_days)){
+  Data_Day <- read_tsv(file = List_days[Day], skip = 1, col_names = colnames(DataTemp))
+  DataTemp<- rbind(DataTemp, Data_Day)
+}
+
+DataTemp<-DataTemp[DataTemp$Mouvement!="Mouvement" & DataTemp$Mouvement!="#",]
+
+#order DataTemp (execute new variables for data temp before this)
+DataTemp <- DataTemp[order(DataTemp$TimeMovementPOSIX),] 
+
+#merge XArret,YArret to myData
+DataTemp[52:ncol(DataTemp)]
+myData<-cbind(myData,DataTemp[49:ncol(DataTemp)])
+
+remCol<-c(grep("XArret", colnames(myData)),grep("YArret", colnames(myData)),grep("Duree", colnames(myData)))
+myData<-select(myData, -remCol)
+
+#order the last columns of the dataset
+dataStops=myData[,65:265]
+myData[,65:265]=dataStops[orderTime,]
+
+myData[grep("Duree", colnames(myData))] = sapply(myData[grep("Duree", colnames(myData))],as.numeric,na.rm=TRUE)
+
+rowSums(myData[grep("Duree", colnames(myData))], na.rm=TRUE)
+
+#Differences 2 datasets
+
+diffMyTemp<-with_tz(as_datetime(setdiff(myData$TimeMovementPOSIX, DataTemp$TimeMovementPOSIX)), "CET")
+diffTempMy<-with_tz(as_datetime(setdiff(DataTemp$TimeMovementPOSIX, myData$TimeMovementPOSIX)), "CET")
+
+dfDiffMyTemp<-myData[which(myData$TimeMovementPOSIX %in% diffMyTemp),]
+dfDiffTempMy<-DataTemp[which(DataTemp$TimeMovementPOSIX %in% diffTempMy),]
+
+
+#create a dataset of XY Arret----------
+
+grep("XArret", colnames(DataTemp))==grep("YArret", colnames(DataTemp))-1
+
+XY <- data.frame(matrix(ncol = 2, nrow = 0))
+x <- c("lat", "lon")
+colnames(XY) <- x
+
+for (i in grep("XArret", colnames(DataTemp))) {
+  XY <- rbind(XY,data.frame("lat"=DataTemp[!is.na(DataTemp[,i]),i],"lon"=DataTemp[!is.na(DataTemp[,i+1]),i+1]))
+}
+as.numeric(XY$lat)
+write.csv(XY,"/home/rita/Documents/Universita/Stage/Projet\ Jumeau\ Numérique/ XY.csv", row.names = FALSE)
 
 library(readxl)
 library(chron)
 library(dplyr)
 
-#Converting char to num type in the dataframe
+#Converting char to num type in the dataframe-------
 myData <- subset(Data, select = -c(Colonne17, Colonne22, Colonne23, Colonne34, Colonne35, Colonne44, Classification, EvtTraite, CatTurb, Commentaire, Configuration))
 
 data <- read_xlsx("~/Documenti/Universita/Stage/Projet Jumeau Numérique/SampleDataSolPropre.xlsx")
@@ -18,6 +84,11 @@ SampleData <- subset(data, select = -c(Motorisation, Pai, Colonne17, Colonne22, 
 SampleData <- SampleData[!is.na(SampleData$Mouvement), ]
 
 #New Variables-----------------
+
+myData$HeureTu<- chron(times=myData$HeureTu)
+myData$HeureTuDebutDecollage <- chron(times=myData$HeureTuDebutDecollage)
+mydates <- dates(myData$DateTu, format = "d/m/y")
+myData$DateTu<- chron(dates = mydates, format = "d/m/y")
 
 #Parking area
 myData$ParkingArea<-sub("^([[:alpha:]]*).*", "\\1", myData$Porte)
@@ -72,11 +143,174 @@ myData$groupedRunway<-myData$Qfu
 myData$groupedRunway[!myData$Qfu %in% c("NORD", "SUD")]<-gsub('.{1}$', '', myData$Qfu[!myData$Qfu %in% c("NORD", "SUD")])
 unique(myData$groupedRunway)
 
+#create time of flight and order data
+myData["TimeMovement"]=chron(dates = myData[["DateTu"]], times = hms::as_hms(myData[["HeureTu"]]), format = c(dates = "d-m-y", times = "h:m:s"))
+myData<-myData[order(myData$TimeMovement),]
+
+DataTemp["TimeMovement"]=chron(dates = DataTemp[["DateTu"]], times = hms::as_hms(DataTemp[["HeureTu"]]), format = c(dates = "d/m/y", times = "h:m:s"))
+orderTime=order(DataTemp$TimeMovement)
+#create time of flight POSIX and order data
+listTimes<-paste(DataTemp$DateTu, hms::as_hms(DataTemp$HeureTu), sep=" ")
+DataTemp$TimeMovementPOSIX= as.POSIXct(listTimes, format = "%d/%m/%Y %H:%M:%S")
+
+myListTimes<-paste(myData$DateTu, hms::as_hms(myData$HeureTu), sep=" ")
+myData$TimeMovementPOSIX= as.POSIXct(myListTimes, format = "%d/%m/%Y %H:%M:%S")
+
 
 #runway closed for more than 1 day
 myData$longClosure=rep(FALSE, nrow(myData))
 myData[myData$TimeMovement>chron(dates = "08/07/18", times = "20:00:00", format = c(dates = "d/m/y", times = "h:m:s")) & myData$TimeMovement<chron(dates = "09/10/18", times = "15:00:00", format = c(dates = "d/m/y", times = "h:m:s")),]$longClosure<-TRUE
 myData[myData$TimeMovement>chron(dates = "13/11/19", times = "21:15:00", format = c(dates = "d/m/y", times = "h:m:s")) & myData$TimeMovement<chron(dates = "18/11/19", times = "04:30:00", format = c(dates = "d/m/y", times = "h:m:s")),]$longClosure<-TRUE
+
+#fix tempsAttenteTotal
+myData[,grep("DureeArret", colnames(myData))]<-sapply(myData[,grep("DureeArret", colnames(myData))], as.numeric)
+
+myData$TempsArretTotal<-rowSums(myData[,grep("DureeArret", colnames(myData))], na.rm=TRUE)
+
+# mean of IntervalRunwy for the past 10 flights NOT WORKING------------------
+
+# 
+# laggedIntervalsNA<-data.frame(IntervalRunway=myData[myData$jointRunway=="NA",]$IntervalRunway,
+#                               IntervalRunwayNA=myData[myData$jointRunway=="NA",]$IntervalRunway,
+#                               lag1=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,1),
+#                               lag2=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,2),
+#                               lag3=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,3),
+#                               lag4=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,4),
+#                               lag5=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,5),
+#                               lag6=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,6),
+#                               lag7=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,7),
+#                               lag8=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,8),
+#                               lag9=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,9),
+#                               lag10=lag(myData[myData$jointRunway=="NA",]$IntervalRunway,10))
+# laggedIntervalsSA<-data.frame(IntervalRunway=myData[myData$jointRunway=="SA",]$IntervalRunway,
+#                               IntervalRunwayNA=myData[myData$jointRunway=="SA",]$IntervalRunway,
+#                               lag1=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,1),
+#                               lag2=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,2),
+#                               lag3=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,3),
+#                               lag4=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,4),
+#                               lag5=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,5),
+#                               lag6=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,6),
+#                               lag7=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,7),
+#                               lag8=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,8),
+#                               lag9=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,9),
+#                               lag10=lag(myData[myData$jointRunway=="SA",]$IntervalRunway,10))
+# laggedIntervalsND<-data.frame(IntervalRunway=myData[myData$jointRunway=="ND",]$IntervalRunway,
+#                               IntervalRunwayNA=myData[myData$jointRunway=="ND",]$IntervalRunway,
+#                               lag1=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,1),
+#                               lag2=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,2),
+#                               lag3=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,3),
+#                               lag4=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,4),
+#                               lag5=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,5),
+#                               lag6=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,6),
+#                               lag7=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,7),
+#                               lag8=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,8),
+#                               lag9=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,9),
+#                               lag10=lag(myData[myData$jointRunway=="ND",]$IntervalRunway,10))
+# laggedIntervalsSD<-data.frame(IntervalRunway=myData[myData$jointRunway=="SD",]$IntervalRunway,
+#                               IntervalRunwayNA=myData[myData$jointRunway=="SD",]$IntervalRunway,
+#                               lag1=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,1),
+#                               lag2=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,2),
+#                               lag3=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,3),
+#                               lag4=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,4),
+#                               lag5=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,5),
+#                               lag6=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,6),
+#                               lag7=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,7),
+#                               lag8=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,8),
+#                               lag9=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,9),
+#                               lag10=lag(myData[myData$jointRunway=="SD",]$IntervalRunway,10))
+# 
+# 
+# laggedIntervalsNA$IntervalMean<-apply(laggedIntervalsNA,1,mean, na.rm=TRUE)
+# laggedIntervalsSA$IntervalMean<-apply(laggedIntervalsSA,1,mean, na.rm=TRUE)
+# laggedIntervalsND$IntervalMean<-apply(laggedIntervalsND,1,mean, na.rm=TRUE)
+# laggedIntervalsSD$IntervalMean<-apply(laggedIntervalsSD,1,mean, na.rm=TRUE)
+# 
+# 
+# laggedIntervalsNA$IntervalSd<-apply(laggedIntervalsNA,1,sd, na.rm=TRUE)
+# laggedIntervalsSA$IntervalSd<-apply(laggedIntervalsSA,1,sd, na.rm=TRUE)
+# laggedIntervalsND$IntervalSd<-apply(laggedIntervalsND,1,sd, na.rm=TRUE)
+# laggedIntervalsSD$IntervalSd<-apply(laggedIntervalsSD,1,sd, na.rm=TRUE)
+# 
+# laggedIntervalsNA<-laggedIntervalsNA*24*60
+# laggedIntervalsSA<-laggedIntervalsSA*24*60
+# laggedIntervalsND<-laggedIntervalsND*24*60
+# laggedIntervalsSD<-laggedIntervalsSD*24*60
+# 
+# laggedIntervalsSD$time=myData[myData$jointRunway=="SD",]$TimeMovement
+# laggedIntervalsNA$time=myData[myData$jointRunway=="NA",]$TimeMovement
+# laggedIntervalsND$time=myData[myData$jointRunway=="ND",]$TimeMovement
+# laggedIntervalsSA$time=myData[myData$jointRunway=="SA",]$TimeMovement
+# 
+# laggedIntervalsSA<-laggedIntervalsSA[, c(ncol(laggedIntervalsSA), 1:ncol(laggedIntervalsSA)-1)]
+# laggedIntervalsNA<-laggedIntervalsNA[, c(ncol(laggedIntervalsNA), 1:ncol(laggedIntervalsNA)-1)]
+# laggedIntervalsSD<-laggedIntervalsSD[, c(ncol(laggedIntervalsSD), 1:ncol(laggedIntervalsSD)-1)]
+# laggedIntervalsND<-laggedIntervalsND[, c(ncol(laggedIntervalsND), 1:ncol(laggedIntervalsND)-1)]
+# 
+# laggedIntervalsNA$closed<-rep(FALSE, nrow(laggedIntervalsNA))
+# laggedIntervalsND$closed<-rep(FALSE, nrow(laggedIntervalsND))
+# laggedIntervalsSA$closed<-rep(FALSE, nrow(laggedIntervalsSA))
+# laggedIntervalsSD$closed<-rep(FALSE, nrow(laggedIntervalsSD))
+                          
+apply(mean(c(lag(myData$IntervalRunway,2), lag(myData$IntervalRunway,1))))
+
+
+# mean of IntervalRunwy for the past 10 flights--------
+
+laggedIntervalsA<-data.frame(IntervalRunway=myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,
+                              IntervalRunwayNA=myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,
+                              lag1=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,1),
+                              lag2=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,2),
+                              lag3=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,3),
+                              lag4=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,4),
+                              lag5=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,5),
+                              lag6=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,6),
+                              lag7=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,7),
+                              lag8=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,8),
+                              lag9=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,9),
+                              lag10=lag(myData[myData$Mouvement=="Atterrissage",]$IntervalRunway,10))
+laggedIntervalsD<-data.frame(IntervalRunway=myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,
+                              IntervalRunwayNA=myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,
+                              lag1=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,1),
+                              lag2=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,2),
+                              lag3=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,3),
+                              lag4=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,4),
+                              lag5=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,5),
+                              lag6=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,6),
+                              lag7=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,7),
+                              lag8=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,8),
+                              lag9=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,9),
+                              lag10=lag(myData[myData$Mouvement!="Atterrissage",]$IntervalRunway,10))
+
+laggedIntervalsA$IntervalMean<-apply(laggedIntervalsA[3:12],1,mean, na.rm=TRUE)
+laggedIntervalsD$IntervalMean<-apply(laggedIntervalsD[3:12],1,mean, na.rm=TRUE)
+
+laggedIntervalsA$IntervalSd<-apply(laggedIntervalsA[3:12],1,sd, na.rm=TRUE)
+laggedIntervalsD$IntervalSd<-apply(laggedIntervalsD[3:12],1,sd, na.rm=TRUE)
+
+laggedIntervalsA<-laggedIntervalsA*24*60
+laggedIntervalsD<-laggedIntervalsD*24*60
+
+laggedIntervalsA$Runway=myData[myData$Mouvement=="Atterrissage",]$Qfu
+laggedIntervalsD$Runway=myData[myData$Mouvement!="Atterrissage",]$Qfu
+
+laggedIntervalsA$time=myData[myData$Mouvement=="Atterrissage",]$TimeMovement
+laggedIntervalsD$time=myData[myData$Mouvement!="Atterrissage",]$TimeMovement
+
+laggedIntervalsA<-laggedIntervalsA[, c(ncol(laggedIntervalsA), ncol(laggedIntervalsA)-1, 1:(ncol(laggedIntervalsA)-2))]
+laggedIntervalsD<-laggedIntervalsD[, c(ncol(laggedIntervalsD), ncol(laggedIntervalsA)-1, 1:(ncol(laggedIntervalsD)-2))]
+
+a<-laggedIntervalsA[laggedIntervalsA$IntervalRunway>laggedIntervalsA$IntervalMean+2*laggedIntervalsA$IntervalSd & laggedIntervalsA$IntervalRunway>10,]
+
+nrow(a[!is.na(a$IntervalRunway) & a$Runway=="27R",])/length(unique(dates(a[a$Runway=="27R",]$time)))
+nrow(laggedIntervalsA[dates(laggedIntervalsA$time)==chron(dates = "04/01/18") & !is.na(laggedIntervalsA$IntervalRunway) & laggedIntervalsA$Runway=="27R" & laggedIntervalsA$IntervalRunway>10,])
+length(unique(dates(a$time)))
+
+
+laggedIntervalsNA$closed<-rep(FALSE, nrow(laggedIntervalsNA))
+laggedIntervalsND$closed<-rep(FALSE, nrow(laggedIntervalsND))
+laggedIntervalsSA$closed<-rep(FALSE, nrow(laggedIntervalsSA))
+laggedIntervalsSD$closed<-rep(FALSE, nrow(laggedIntervalsSD))
+
 
 
 
@@ -168,13 +402,16 @@ library(dplyr)
 companyMeans<-as.data.frame(myData %>%
                 group_by(Compagnie) %>%
                 summarize(n=n(),percentage=n()/nrow(myData),mean = mean(TempsRoulage, na.rm = TRUE), sd=sd(TempsRoulage), meanD=mean(DistanceRoulage, na.rm=TRUE)))
-
-linearRegression<-lm(formula = companyMeans[companyMeans$n>3,]$mean ~ companyMeans[companyMeans$n>3,]$meanD, x=TRUE, y=TRUE)
-summary(linearRegression)
-
+#linear regressions---------------------
+linearRegressionCompagnie<-lm(formula = companyMeans[companyMeans$n>3,]$mean ~ companyMeans[companyMeans$n>3,]$meanD, x=TRUE, y=TRUE)
+summary(linearRegressionCompagnie)
 
 AnovaCompagnie<-aov(myData[myData$Compagnie %in% c("AFR","EZY"),]$TempsRoulage~myData[myData$Compagnie %in% c("AFR","EZY"),]$Compagnie)
 summary(AnovaCompagnie)
+
+linearRegressionDistance
+
+
 
 #plot pairwise comparison
 plot(TukeyHSD(ANOVA_FDX_Qfu))
@@ -612,17 +849,14 @@ groupby_Pai[order(groupby_Pai$count),]
 #Plot mean variables vs time-------------
 
 myData$HeureStart[myData$Mouvement == "Atterrissage"] <- myData$HeureTu[myData$Mouvement == "Atterrissage"]
+
 myData$HeureStart[myData$Mouvement != "Atterrissage"] <- 
-  myData$HeureTu[myData$Mouvement != "Atterrissage"] - (myData$Top[myData$Mouvement != "Atterrissage"] + myData$TempsAttente1[myData$Mouvement != "Atterrissage"]
-                                                        + myData$TempsAttente2[myData$Mouvement != "Atterrissage"] + myData$TempsAttente3[myData$Mouvement != "Atterrissage"]
-                                                        + myData$TempsArretTotal[myData$Mouvement != "Atterrissage"] + myData$TempsAttentePiste[myData$Mouvement != "Atterrissage"]
-                                                        + myData$TempsRoulage[myData$Mouvement != "Atterrissage"] + myData$TempsTraversee[myData$Mouvement != "Atterrissage"])
+  myData$HeureTu[myData$Mouvement != "Atterrissage"] - (myData$Top[myData$Mouvement != "Atterrissage"] + myData$TempsAttentePiste[myData$Mouvement != "Atterrissage"]
+                                                        + myData$TempsRoulage[myData$Mouvement != "Atterrissage"] )
 
 
 myData$HeureStop[myData$Mouvement == "Atterrissage"] <- 
-  myData$HeureTu[myData$Mouvement == "Atterrissage"] + (myData$Top[myData$Mouvement == "Atterrissage"] + myData$TempsTraversee[myData$Mouvement == "Atterrissage"]
-                                                        + myData$TempsAttente1[myData$Mouvement == "Atterrissage"] + myData$TempsAttente2[myData$Mouvement == "Atterrissage"]
-                                                        + myData$TempsAttente3[myData$Mouvement == "Atterrissage"] + myData$TempsArretTotal[myData$Mouvement == "Atterrissage"]
+  myData$HeureTu[myData$Mouvement == "Atterrissage"] + (myData$Top[myData$Mouvement == "Atterrissage"]
                                                         + myData$TempsRoulage[myData$Mouvement == "Atterrissage"] )
 
 myData$HeureStop[myData$Mouvement != "Atterrissage"] <- myData$HeureTu[myData$Mouvement != "Atterrissage"]
@@ -644,7 +878,7 @@ AttenteMoy<- function(Data,TimeStep,Start = 0, Stop = 86400, type = "smooth"){
     else {
       avionsvoies <- Data$Indicatif[min<Data$HeureTu & Data$HeureTu< max]  
     }
-    TpsAttenteMoy$TempsAttenteMoy[i+1] <- mean((Data$TempsAttentePiste + Data$TempsArretTotal + Data$TempsAttente1 + Data$TempsAttente2+ Data$TempsAttente3)[Data$Indicatif %in% avionsvoies])
+    TpsAttenteMoy$TempsAttenteMoy[i+1] <- mean((Data$TempsArretTotal)[Data$Indicatif %in% avionsvoies])
   }
   return(TpsAttenteMoy)
 }
@@ -865,11 +1099,6 @@ library(chron)
 library(dplyr)
 
 #Creation of variable expected runway, Orientation of runway and Direction of runway, time interval between flights and between those in the same runway-------
-
-#create time of flight and order data
-myData["TimeMovement"]=chron(dates = myData[["DateTu"]], times = hms::as_hms(myData[["HeureTu"]]), format = c(dates = "d/m/y", times = "h:m:s"))
-myData<-myData[order(myData$TimeMovement),]
-
 #create time interval between flights in the same runway----------
 coupledRunways<-list()
 coupledRunways[[1]]<-c("09L", "27R")
@@ -1127,17 +1356,75 @@ for (i in coupledRunways){
   a[a$Qfu %in% i,]$IntervalRunway=a[a$Qfu%in%i,]$TimeMovement- lag(a[a$Qfu%in%i,]$TimeMovement)
 }
 
-a$IntervalRunway<-a$IntervalRunway*60*24
-
-hist(a[a$IntervalRunway<20000,]$IntervalRunway, breaks = 20)
-hist(a[a$IntervalRunway<100,]$IntervalRunway, breaks=25)
-
-length(unique(a$DateTu))
-hist(as.numeric(a$hour), breaks=0:23)
-
 c<-myData[myData$TempsRoulage>2000 & myData$TempsArretTotal==0 & is.na(myData$TempsDegivrage),]
 
-b<-a[a$IntervalRunway<40,]
+myData[myData$TempsArretTotal==0,]$DistanceRoulage/myData[myData$TempsArretTotal==0,]$VitesseMoyRoulage*60==myData[myData$TempsArretTotal==0,]$TempsRoulage
+plot(myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage<0.014,]$DistanceRoulage/myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage<0.014,]$TempsRoulage, myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage<0.014,]$VitesseMoyRoulage/3600, xlab="DistanceRoulage(miles)/TempsRoulage(s)", ylab="VitesseMoyRoulage(miles/s)")
+i=myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage>0.014,]
+abline(a = 0, b =1, col = "red")
 
-criticalDates<- as.data.frame(a %>% group_by(DateTu) %>% tally())
+
+a<-myData[myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage<0.014,]$DistanceRoulage/
+  myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage<0.014,]$TempsRoulage > 2* myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage<0.014,]$VitesseMoyRoulage/3600,]
+
+b<-myData[myData$TempsArretTotal==0 & myData$DistanceRoulage/myData$TempsRoulage<0.014 & myData$DistanceRoulage/myData$TempsRoulage > 2* myData$VitesseMoyRoulage/3600,]
+
+plot(DataTemp[DataTemp$TempsArretTotal==0 & DataTemp$DistanceRoulage/DataTemp$TempsRoulage<0.014,]$DistanceRoulage/DataTemp[DataTemp$TempsArretTotal==0 & DataTemp$DistanceRoulage/DataTemp$TempsRoulage<0.014,]$TempsRoulage, DataTemp[DataTemp$TempsArretTotal==0 & DataTemp$DistanceRoulage/DataTemp$TempsRoulage<0.014,]$VitesseMoyRoulage/3600, xlab="DistanceRoulage(miles)/TempsRoulage(s)", ylab="VitesseMoyRoulage(miles/s)")
+
+DataTemp$DistanceRoulage<-as.numeric(DataTemp$DistanceRoulage)
+DataTemp$TempsRoulage<-as.numeric(DataTemp$TempsRoulage)
+DataTemp$VitesseMoyRoulage<-as.numeric(DataTemp$VitesseMoyRoulage)
+
+#departure runway used for arrivals and viceversa--------------
+oppRw<-myData[myData$oppositeRunway,]$TimeMovement
+oppRw<-sort(oppRw)
+oppRwInt<-oppRw-lag(oppRw)
+oppRwInt
+
+hist(oppRwInt[oppRwInt<3/24], main="Time interval between two wrong uses of rw", xlab="time interval between wrong uses (days)", ylab="Frequency" )
+mean(oppRwInt)
+sd(oppRwInt, na.rm = TRUE)*24*60
+
+
+rdSubset<-myData[sample(1:nrow(myData), length(a)),]$TimeMovement
+rdSubset<-sort(rdSubset)
+rdSubsetInt<-rdSubset-lag(rdSubset)
+mean(rdSubsetInt)
+sd(rdSubsetInt, na.rm = TRUE)*24*60
+hist(rdSubsetInt[rdSubsetInt<3/24], main="Time interval between two wrong uses of rw", xlab="time interval between wrong uses (days)", ylab="Frequency" )
+
+
+oppRwClosed<-myData[myData$oppositeRunway & myData$closedNA | myData$oppositeRunway & myData$closedSA | myData$oppositeRunway & myData$closedSD | myData$oppositeRunway & myData$closedND,]
+nrow(oppRwClosed)/length(oppRw)
+length(oppRw)-nrow(oppRwClosed)
+
+#the most part of opposite runway flights are caused by runway closure
+
+
+#vitesse roulage A320
+A320<-myData[myData$TypeAvion=="A320",]
+A320$VitesseMoyRoulage
+
+w<-myData[myData$TempsRoulage<150 & myData$Mouvement!="Atterrissage",]
+
+#speed of aircraft-----------------
+
+speed <-as.data.frame(myData[myData$TypeAvion == "A319" ,] %>%
+                   group_by(Mouvement, Pai, Qfu) %>%
+                   summarize(mean = mean(VitesseMoyRoulage, na.rm = TRUE), sd= sd(VitesseMoyRoulage), n=n()))
+
+a<-speed[speed$n>10,]
+
+
+freqSpeed<-as.data.frame(table(myData[myData$TypeAvion == "A319",]$Compagnie))
+freqSpeed[order(freqSpeed$Freq, decreasing = TRUE),]
+compSpeed<-freqSpeed[freqSpeed$Freq>100,]$Var1
+AnovaSpeed<-aov(myData[myData$TypeAvion == "A319" & myData$Mouvement == "Atterrissage" & myData$Pai=="T2-TE3" & !myData$Qfu %in% c("NORD","SUD"),]$VitesseMoyRoulage ~ myData[myData$TypeAvion == "A319" & myData$Mouvement == "Atterrissage" & myData$Pai=="T2-TE3" & !myData$Qfu %in% c("NORD","SUD"),]$Qfu)
+summary(AnovaSpeed)
+plot(TukeyHSD(AnovaSpeed, "aa"))
+?TukeyHSD
+AnovaSpeed<-aov(myData[myData$TypeAvion == "A319" & myData$Compagnie =="EZY" & !myData$Qfu %in% c("NORD","SUD"),]$VitesseMoyRoulage ~ myData[myData$TypeAvion == "A319" & myData$Compagnie == "EZY" & !myData$Qfu %in% c("NORD","SUD"),]$Qfu)
+
+
+AnovaSpeed<-aov(myData[myData$TypeAvion == "A319" & myData$Mouvement == "Atterrissage",]$VitesseMoyRoulage ~ myData[myData$TypeAvion == "A319" & myData$Mouvement == "Atterrissage",]$CheminementClean)
 
