@@ -1,18 +1,110 @@
 extensions [ nw ]
 
-globals [parkings take-off-entrances landing-exits previous-movement-time taxi-times]
+globals [parkings take-off-entrances landing-exits previous-movement-time taxi-times i stop?]
 
 breed [ intersections intersection ]
 intersections-own [name occupation-time]
 
 breed [ airplanes airplane ]
-airplanes-own [ start-node end-node path nodes departure next-node-number next-node current-road stop-intersection speed step taxi-time time-unanswered]
+airplanes-own [ start-node end-node path nodes departure next-node-number next-node current-road stop-intersection speed step taxi-time waiting-time reason-waiting]
 
 directed-link-breed [ roads road ]
 roads-own [ weight ]
 
 directed-link-breed [ conflicts conflict ]
-conflicts-own [active in-node out-node common-intersections]
+conflicts-own [active in-node out-node common-intersections origin destination road-origin-creation road-destination-creation time-creation time-active road-origin-active road-destination-active]
+
+
+to test
+    clear-all
+  reset-ticks
+
+  nw:set-context intersections links
+  nw:load-graphml "NwDir.graphml"
+
+  set previous-movement-time 0
+
+  set parkings (list "BM1" "EM1" "BM1-EM1-M" "BM2-M" "EM2" "BM2-M" "EM2" "EM23" "EM4-EM3" "EM5" "EM6" "BM4-M" "U" "V" "W" "X" "Y" "Z" "A-Z" "A-A3-1" "A-A3-2" "A-NA1" "A4" "QB2-F-B" "QB1-B-N")
+  set take-off-entrances (list "D1-09R" "D2A-D2-09R" "D3-09R" "D4-Y1-09R" "D5-Y1-09R" "D6-09R")
+  set landing-exits (list "Z8-27R" "Z7-27R" "Z6-27R" "Z5-27R")
+
+    layout-circle intersections 40
+  ask intersections[
+    set occupation-time 0
+    set color red
+    set shape "dot"
+  ]
+  set stop? false
+  set taxi-times []
+  create-airplanes 1 [
+
+  set color yellow
+  set shape "airplane"
+  set departure one-of [ true false ]
+  set start-node turtle 123
+  set end-node turtle 62
+  set-path
+  set-nodes
+  set speed (random-gamma 33.5 1.35) / 3.6
+  set stop-intersection []
+  set next-node-number 1
+  set next-node item next-node-number path
+
+  set-current-road
+  set taxi-time 0
+  set waiting-time 0
+    set reason-waiting 0
+  move-to item 0 path
+  face next-node
+  set step (distance next-node * speed / [weight] of current-road)]
+
+  move tick
+  move tick
+  move tick
+
+ create-airplanes 1[
+
+  set color yellow
+  set shape "airplane"
+  set departure one-of [ true false ]
+  set start-node turtle 39
+  set end-node turtle 49
+  set-path
+  set-nodes
+  set speed (random-gamma 33.5 1.35) / 3.6
+  set stop-intersection []
+  set next-node-number 1
+  set next-node item next-node-number path
+  set-current-road
+
+  set taxi-time 0
+  set waiting-time 0
+  move-to item 0 path
+  face next-node
+    set step (distance next-node * speed / [weight] of current-road)
+
+    ask other airplanes [
+      let stop-intersection-proposal-old value-stop-intersection
+      if(stop-intersection-proposal-old != "not-assigned")
+      [ set stop-intersection lput stop-intersection-proposal-old stop-intersection
+        ask myself [set stop-intersection lput value-stop-intersection stop-intersection ]
+        ; il prossimo nodo dell'aereo vecchio
+        ifelse member? next-node (sublist path position last stop-intersection path ( 1 +  position last [stop-intersection] of myself path ) )
+        [ create-conflict-to-target myself true ]
+        [ create-conflict-to-target myself false ]
+
+        ask myself[ create-conflict-to-target myself false ]
+      ]
+    ]
+  ]
+  ask airplanes [
+    show [weight] of current-road
+    show current-road
+    show distance item (next-node-number - 1) path
+  ]
+
+
+end
 
 
 
@@ -29,21 +121,21 @@ to setup
   set take-off-entrances (list "D1-09R" "D2A-D2-09R" "D3-09R" "D4-Y1-09R" "D5-Y1-09R" "D6-09R")
   set landing-exits (list "Z8-27R" "Z7-27R" "Z6-27R" "Z5-27R")
 
-  layout-circle intersections 15
-
+  layout-circle intersections 40
   ask intersections[
     set occupation-time 0
     set color red
     set shape "dot"
   ]
-
+  set stop? false
+  set i 1
   set taxi-times []
-
   create-airplanes 1 [settings-new-airplane]
 end
 
 
 to go
+
   if ticks - previous-movement-time = time-interval-departures [
 
     create-airplanes 1[
@@ -52,37 +144,60 @@ to go
         let stop-intersection-proposal-old value-stop-intersection
         if(stop-intersection-proposal-old != "not-assigned")
         [ set stop-intersection lput stop-intersection-proposal-old stop-intersection
-          ask myself [ set stop-intersection lput value-stop-intersection stop-intersection]
+          ask myself [set stop-intersection lput value-stop-intersection stop-intersection ]
+          ; il prossimo nodo dell'aereo vecchio
+          ifelse member? next-node (sublist path position last stop-intersection path ( 1 +  position last [stop-intersection] of myself path ) )
+          [ create-conflict-to-target myself true ]
+          [ create-conflict-to-target myself false ]
 
-          create-conflict-to-target myself false last stop-intersection (last [stop-intersection] of myself) (sublist path position last stop-intersection path ( 1 +  position last [stop-intersection] of myself path ) )
-          ask myself [create-conflict-to-target myself false last stop-intersection (last [stop-intersection] of myself) (sublist path position last stop-intersection path ( 1 +  position last [stop-intersection] of myself path ) ) ]
+          ask myself[ create-conflict-to-target myself false ]
         ]
       ]
     ]
     set previous-movement-time ticks
   ]
-  ask conflicts [set color [255 0 0 0] ]
   move
   ask intersections with [occupation-time > 0] [
     set occupation-time round occupation-time - 1]
+
+  ask airplanes [
+    if any? other airplanes-here[
+      ask other airplanes-here [
+        if (next-node = item ( [next-node-number] of myself - 1 ) [path] of myself) and ( item (next-node-number - 1) path = [next-node] of myself ) and (patch-here != [patch-here] of start-node) and ([patch-here] of myself != [[patch-here] of start-node] of myself)[
+          show (list round (i / 2) "path"  path)
+          set color yellow
+          show (list round (i / 2) "current-road" current-road)
+          show (list round (i / 2) "common intersections" [common-intersections] of out-conflict-to myself)
+          show distance next-node * speed / step
+          ask out-conflict-to myself [set color yellow]
+          set i i + 1
+          set stop? true
+        ]
+      ]
+    ]
+  ]
+  if stop? [stop]
   tick
 end
 
 
 to set-start-node
-  ifelse departure [set start-node item (random length parkings) parkings]
-  [set start-node item (random length landing-exits) landing-exits]
+  let parking  item (random length parkings) parkings
+  let landing-exit item (random length landing-exits) landing-exits
+  ifelse departure [set start-node one-of intersections with [name = parking]]
+  [set start-node one-of intersections with [name = landing-exit]]
 end
 
 to set-end-node
-  ifelse departure [set end-node item (random length take-off-entrances) take-off-entrances]
-  [set end-node item (random length parkings) parkings]
+  let parking  item (random length parkings) parkings
+  let take-off-entrance  item (random length take-off-entrances) take-off-entrances
+  ifelse departure [set end-node one-of intersections with [name = take-off-entrance]]
+  [set end-node one-of intersections with [name = parking]]
 end
 
 to set-path
-  let target end-node
-  ask intersections with [name = [start-node] of myself] [
-    let path-of-airplane nw:turtles-on-weighted-path-to one-of intersections with [name = target] weight
+  ask start-node [
+    let path-of-airplane nw:turtles-on-weighted-path-to [end-node] of myself weight
     ask myself [
       set path path-of-airplane
     ]
@@ -99,10 +214,11 @@ to set-current-road
   let current-road-temp 0
   ask next-node [set current-road-temp link-with item ([next-node-number] of myself - 1) [path] of myself]
   set current-road current-road-temp
+
 end
 
 to settings-new-airplane
-  set color blue
+  set color yellow
   set shape "airplane"
   set departure one-of [ true false ]
   set-start-node
@@ -115,7 +231,7 @@ to settings-new-airplane
   set next-node item next-node-number path
   set-current-road
   set taxi-time 0
-  set time-unanswered 0
+  set waiting-time 0
   move-to item 0 path
   face next-node
   set step (distance next-node * speed / [weight] of current-road)
@@ -139,12 +255,28 @@ to-report both-ends-of [a-link]
   report both-ends-of-a-link
 end
 
-to create-conflict-to-target [target -active -in-node -out-node -common-intersections]
-create-conflict-to target [
-  set active -active
-  set in-node -in-node
-  set out-node -out-node
-  set common-intersections -common-intersections]
+to create-conflict-to-target [target -active]
+  create-conflict-to target [
+    set in-node [last stop-intersection] of myself
+    set out-node [last stop-intersection] of target
+    set common-intersections (sublist [path] of myself position last [stop-intersection] of myself [path] of myself ( 1 +  position last [stop-intersection] of target [path] of myself ))
+    set active -active
+    set color [255 0 0 0]
+    set origin myself
+    set destination target
+    set road-origin-creation [current-road] of myself
+    set road-destination-creation [current-road] of target
+    set time-creation ticks
+    ifelse -active [
+      set time-active ticks
+      set road-origin-active [current-road] of myself
+      set road-destination-active [current-road] of target
+    ][
+      set time-active "not assigned"
+      set road-origin-active "not assigned"
+      set road-destination-active "not assigned"
+    ]
+  ]
 end
 
 
@@ -156,48 +288,86 @@ to set-occupation-time
 end
 
 
-
 to move
-  ask airplanes with [time-unanswered != 0] [
-    set time-unanswered time-unanswered - 1
-    set taxi-time taxi-time + 1
-  ]
-  ask airplanes with [time-unanswered = 0] [
-    ifelse ( 60 * step / speed <= distance next-node and (60 + speed)* step / speed > distance next-node ) or ([weight] of current-road < 60 and distance item (next-node-number - 1) path = 0 )[
-      ;show [name] of next-node
+  ask airplanes [
+    if taxi-time > 2000 [ ;show self
+    set color green
+      set stop? true
+    ]
 
-      ifelse any? my-in-conflicts with [out-node = [next-node] of myself and active = true] [
-
-        set taxi-time taxi-time + 1 ][
-        ifelse [occupation-time] of next-node = 0 [
-          ifelse workload > random-float 1 [
-            set time-unanswered random 60
-            set taxi-time taxi-time + 1
-
-          ][
-            ask my-out-conflicts with [in-node = [next-node] of myself] [set active true]
-            ask next-node [ set-occupation-time]
-            fd step
-            set taxi-time ( taxi-time + 1 )
+    ifelse distance start-node = 0 [
+      ifelse any? my-in-conflicts with [out-node = [start-node] of myself and active = true] or ( [weight] of current-road < 60 and (any? my-in-conflicts with [out-node = [next-node] of myself and active = true] ) )
+      [
+        set taxi-time taxi-time + 1
+        set waiting-time waiting-time + 1
+        set reason-waiting list "at start node" my-in-conflicts with [out-node = [start-node] of myself and active = true]
+      ][
+        ifelse [occupation-time] of start-node = 0  [
+          ask my-out-conflicts with [in-node = [start-node] of myself]
+          [set active true
+            set time-active ticks
+            set road-origin-active [current-road] of myself
+            set road-destination-active [current-road] of other-end
           ]
-        ][set taxi-time ( taxi-time + 1 )]
+          if [weight] of current-road < 60
+          [ ask my-out-conflicts with [in-node = [next-node] of myself]
+            [ set active true
+              set time-active ticks
+              set road-origin-active [current-road] of myself
+              set road-destination-active [current-road] of other-end
+            ]
+          ]
+          ask start-node [ set-occupation-time]
+          fd step
+          set taxi-time ( taxi-time + 1 )
+          set waiting-time 0
+        ]
+        [set taxi-time ( taxi-time + 1 )
+          set waiting-time waiting-time + 1
+          set reason-waiting "occupation time of start node"
+        ]
       ]
-      ][ifelse distance next-node > step [
+    ][
+      ifelse ( 60 * step / speed <= distance next-node and (60 + speed)* step / speed > distance next-node ) or ([weight] of current-road < 60 and distance item (next-node-number - 1) path = 0 ) [
+      ifelse any? my-in-conflicts with [out-node = [next-node] of myself and active = true]
+      [set taxi-time taxi-time + 1
+        set waiting-time waiting-time + 1
+        set reason-waiting list "at 60 meters" my-in-conflicts with [out-node = [next-node] of myself and active = true]
+      ]
+      [ifelse [occupation-time] of next-node = 0
+        [ ask my-out-conflicts with [in-node = [next-node] of myself]
+          [ set active true set time-active ticks
+            set road-origin-active [current-road] of myself
+            set road-destination-active [current-road] of other-end
+          ]
+          ask next-node [ set-occupation-time]
+          fd step
+          set taxi-time ( taxi-time + 1 )
+        set waiting-time 0]
+        [set taxi-time ( taxi-time + 1 )
+        set waiting-time waiting-time + 1
+        set reason-waiting "occupation time next node"]
+      ]
+      ]
+      [ifelse distance next-node > step [
         fd step
         set taxi-time taxi-time + 1
-      ]
-      [ifelse next-node-number != (-1 + length path) [
-        ask my-out-conflicts with [out-node = [next-node] of myself] [set active false]
-        move-to next-node
-        set next-node-number next-node-number + 1
-        set next-node item next-node-number path
-        set-current-road
-        set step (distance next-node * speed / [weight] of current-road)
-        face next-node
-        set taxi-time taxi-time + 1
-      ][move-to next-node
-        set taxi-times lput  taxi-time taxi-times
-        die
+        set waiting-time 0
+        ]
+        [ifelse next-node-number != (-1 + length path) [
+          ask my-out-conflicts with [out-node = [next-node] of myself] [set active false]
+          move-to next-node
+          set next-node-number next-node-number + 1
+          set next-node item next-node-number path
+          set-current-road
+          set step (distance next-node * speed / [weight] of current-road)
+          face next-node
+          set taxi-time taxi-time + 1
+          set waiting-time 0
+        ][move-to next-node
+          set taxi-times lput  taxi-time taxi-times
+          die
+          ]
         ]
       ]
     ]
@@ -207,11 +377,11 @@ end
 GRAPHICS-WINDOW
 418
 12
-1129
-724
+1336
+931
 -1
 -1
-21.30303030303031
+10.0
 1
 10
 1
@@ -221,10 +391,10 @@ GRAPHICS-WINDOW
 0
 0
 1
--16
-16
--16
-16
+-45
+45
+-45
+45
 0
 0
 1
@@ -274,17 +444,17 @@ time-interval-departures
 time-interval-departures
 0
 300
-44.0
+31.0
 1
 1
 seconds
 HORIZONTAL
 
 PLOT
-1244
-175
-1586
-411
+1368
+105
+1710
+341
 taxi times
 taxi time
 frequancy
@@ -298,20 +468,22 @@ false
 PENS
 "default" 1.0 1 -16777216 true "set-histogram-num-bars 50" "histogram taxi-times\n"
 
-SLIDER
-109
-331
-281
-364
-workload
-workload
-0
-1
-0.5
-0.05
-1
+BUTTON
+160
+53
+223
+86
 NIL
-HORIZONTAL
+test
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
