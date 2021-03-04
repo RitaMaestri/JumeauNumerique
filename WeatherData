@@ -1,0 +1,156 @@
+setwd("~/Projet Jumeau Numérique/NewData/MTO")
+library(readr)
+dir <- getwd()
+List_days_2019 <- list.files(path = dir, pattern = "2019")
+Data_Weather_2019 <- read_tsv(file = List_days_2019[1])
+for (Day in 2:length(List_days_2019)){
+  Data_Day <- read_tsv(file = List_days_2019[Day])
+  Data_Weather_2019 <- rbind(Data_Weather_2019, Data_Day)
+}
+remove(Day)
+remove(Data_Day)
+remove(List_days_2019)
+
+dir <- getwd()
+List_days_2018 <- list.files(path = dir, pattern = "2018")
+Data_Weather_2018 <- read_tsv(file = List_days_2018[1],skip = 2)
+for (Day in 2:length(List_days_2018)){
+  Data_Day <- read_tsv(file = List_days_2018[Day], skip = 2)
+  Data_Weather_2018 <- rbind(Data_Weather_2018, Data_Day)
+}
+remove(Day)
+remove(Data_Day)
+remove(List_days_2018)
+
+Data_Weather_2018_b <- subset.data.frame(Data_Weather_2018, subset = IndexPiste == 1)
+
+Data_Weather_2018_b$IndexPiste <- NULL
+
+Data_Weather <- rbind(Data_Weather_2018_b,Data_Weather_2019)
+
+remove(Data_Weather_2018_b)
+
+Data$Temperature <- NA 
+Data$DirectionVent <- NA
+Data$VitesseVent <- NA
+Data$Pluie <- NA
+
+List_days <- unique(Data_Weather$DateTu)
+for (day in List_days){
+  List_times <- unique(Data_Weather$HeureTu[Data_Weather$DateTu == day])
+  for (i in 1:(length(List_times)-1)){
+    print(paste(day," ",i,"/",length(List_times)-1, sep = ""))
+    Data$Temperature[Data$DateTu == day 
+                   & Data$HeureTu > List_times[i] 
+                   & Data$HeureTu < List_times[i+1]] <- Data_Weather$Temperature[Data_Weather$DateTu == day 
+                                                                                 & Data_Weather$HeureTu == List_times[i]]
+    Data$DirectionVent[Data$DateTu == day 
+                     & Data$HeureTu > List_times[i] 
+                     & Data$HeureTu < List_times[i+1]] <- Data_Weather$DirectionVent[Data_Weather$DateTu == day 
+                                                                                   & Data_Weather$HeureTu == List_times[i]]
+    Data$VitesseVent[Data$DateTu == day 
+                     & Data$HeureTu > List_times[i] 
+                     & Data$HeureTu < List_times[i+1]] <- Data_Weather$VitesseVent[Data_Weather$DateTu == day 
+                                                                                   & Data_Weather$HeureTu == List_times[i]]
+    Data$Pluie[Data$DateTu == day 
+               & Data$HeureTu > List_times[i] 
+               & Data$HeureTu < List_times[i+1]] <- grepl(pattern = "RA", 
+                                                          x= Data_Weather$TempsPresent[Data_Weather$DateTu == day 
+                                                                                                       & Data_Weather$HeureTu == List_times[i]],
+                                                          fixed = TRUE)
+  }
+  Data$Temperature[Data$DateTu == day 
+                 & Data$HeureTu < List_times[1]] <- Data_Weather$Temperature[Data_Weather$DateTu == day 
+                                                                               & Data_Weather$HeureTu == List_times[1]]
+  Data$DirectionVent[Data$DateTu == day 
+                   & Data$HeureTu < List_times[1]] <- Data_Weather$DirectionVent[Data_Weather$DateTu == day 
+                                                                               & Data_Weather$HeureTu == List_times[1]]
+  Data$VitesseVent[Data$DateTu == day 
+                   & Data$HeureTu < List_times[1]] <- Data_Weather$VitesseVent[Data_Weather$DateTu == day 
+                                                                               & Data_Weather$HeureTu == List_times[1]]
+  Data$Pluie[Data$DateTu == day 
+                   & Data$HeureTu < List_times[1]] <- grepl(pattern = "RA", 
+                                                            x= Data_Weather$TempsPresent[Data_Weather$DateTu == day 
+                                                                                                         & Data_Weather$HeureTu == List_times[1]],
+                                                            fixed = TRUE)
+  Data$Temperature[Data$DateTu == day 
+                 & Data$HeureTu > List_times[length(List_times)]] <- Data_Weather$Temperature[Data_Weather$DateTu == day 
+                                                                             & Data_Weather$HeureTu == List_times[length(List_times)]]
+  Data$DirectionVent[Data$DateTu == day 
+                   & Data$HeureTu > List_times[length(List_times)]] <- Data_Weather$DirectionVent[Data_Weather$DateTu == day 
+                                                                                                & Data_Weather$HeureTu == List_times[length(List_times)]]
+  Data$VitesseVent[Data$DateTu == day 
+                   & Data$HeureTu > List_times[length(List_times)]] <- Data_Weather$VitesseVent[Data_Weather$DateTu == day 
+                                                                                                & Data_Weather$HeureTu == List_times[length(List_times)]]
+  Data$Pluie[Data$DateTu == day 
+             & Data$HeureTu > List_times[length(List_times)]] <- grepl(pattern = "RA", 
+                                                      x= Data_Weather$TempsPresent[Data_Weather$DateTu == day 
+                                                                                   & Data_Weather$HeureTu == List_times[length(List_times)]],
+                                                      fixed = TRUE)
+}
+remove(day)
+remove(List_days)
+remove(List_times)
+remove(i)
+
+Data_Weather$DureePluie <- Data_Weather$HeureTu[1] - Data_Weather$HeureTu[1]
+NSample <- nrow(Data_Weather)
+
+for (i in 2:NSample){
+  if (grepl(pattern = "RA", x= Data_Weather$TempsPresent[i], fixed = TRUE)){
+    Data_Weather$DureePluie[i] <- Data_Weather$DureePluie[i-1] + Data_Weather$HeureTu[i] - Data_Weather$HeureTu[i-1]
+  }
+}
+
+library(plotrix)
+len<-aggregate(Data$VitesseMoyRoulage, by= list(Data$DirectionVent), mean)$x
+pos<-aggregate(Data$VitesseMoyRoulage, by= list(Data$DirectionVent), mean)$Groupe.1
+polar.plot(len,pos,main="Vitesse moyenne de roulage en fonction de l'orientation du vent",lwd=3,line.col=4)
+oldpar<-polar.plot(len,pos,main="Vitesse moyenne de roulage en fonction de l'orientation du vent",start=90,clockwise=TRUE,lwd=3,line.col=4)
+
+plot(aggregate(Data$TempsRoulage, by= list(Data$Temperature), mean),
+     xaxs = "i", 
+     yaxs= "i", 
+     ylim = c(0,700), 
+     xlim= c(-5,45), 
+     xlab= "Température (°C)", 
+     ylab = "Temps de Roulage (s)")
+plot(aggregate(Data$NbArrets, by= list(Data$Temperature), mean), 
+     xaxs = "i", 
+     yaxs= "i",
+     ylim = c(0,2), 
+     xlim= c(-5,45), 
+     xlab= "Température (°C)", 
+     ylab = "Nombre d'arrêts moyen")
+plot(aggregate(Data$VitesseMoyRoulage, by= list(Data$Temperature), mean), 
+     xaxs = "i", 
+     yaxs = "i",
+     xlim = c(-5,45), 
+     ylim = c(14,16.5),
+     xlab = "Température (°C)", 
+     ylab = "Vitesse moyenne de roulage (kn)")
+plot(aggregate(Data$TempsRoulage, by= list(Data$VitesseVent), mean),
+     xaxs = "i", 
+     yaxs= "i", 
+     ylim = c(300,600), 
+     xlim= c(0,40), 
+     xlab= "Vitesse du vent(kn)", 
+     ylab = "Temps de Roulage (s)")
+
+
+Table_Temperature_TimeDistrib <-table(as.numeric(substr(Data$HeureTu/3600,1,2)),Data$Temperature)
+
+Control_Temperature <- data.frame()
+
+for (temp in -3:21){
+  for (hour in 0:23){
+    print(temp)
+    Temp <- subset.data.frame(Data, 
+                              subset = as.integer(Data$HeureTu/3600) == hour & 
+                                Data$Temperature == temp)
+    Control_Temperature <- rbind(Control_Temperature, 
+                              Temp[sample(nrow(Temp), Table_Temperature_TimeDistrib[hour+1, 2]), ])
+  }
+}
+
+Data_Temp <- data.frame(sort(unique(Control_Temperature$Temperature)))
